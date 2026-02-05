@@ -1,0 +1,6 @@
+CREATE TABLE gyms (
+  id UUID PRIMARY KEY,
+  name VARCHAR(120) NOT NULL,
+  plan VARCHAR(20) NOT NULL,
+  created_at TIMESTAMP NOT NULL
+);

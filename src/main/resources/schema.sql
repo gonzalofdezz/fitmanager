@@ -1,1 +1,0 @@
--- reserved for future manual schema (optional)
