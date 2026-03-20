@@ -2,14 +2,13 @@ package com.gonzalofdezz.fitmanager.gym.infrastructure.input.rest;
 
 import com.gonzalofdezz.fitmanager.gym.application.usecases.GymService;
 import com.gonzalofdezz.fitmanager.gym.domain.entity.Gym;
-import com.gonzalofdezz.fitmanager.gym.infrastructure.input.rest.dto.CreateGymRequest;
 import com.gonzalofdezz.fitmanager.gym.infrastructure.input.rest.dto.GymResponse;
 import com.gonzalofdezz.fitmanager.gym.infrastructure.input.rest.dto.UpdateGymRequest;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/gyms")
@@ -23,35 +22,42 @@ public class GymController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public GymResponse create(@RequestBody CreateGymRequest request) {
+    public GymResponse create(@Valid @RequestBody CreateGymRequest request) {
         Gym created = gymService.create(request.getName(), request.getPlan());
-        return new GymResponse(created.getId(), created.getName(), created.getPlan(), created.getCreatedAt());
+        return toResponse(created);
     }
 
     @GetMapping
     public List<GymResponse> getAll() {
-        return gymService.getAll().stream()
-                .map(g -> new GymResponse(g.getId(), g.getName(), g.getPlan(), g.getCreatedAt()))
+        return gymService.getAll()
+                .stream()
+                .map(this::toResponse)
                 .toList();
     }
 
     @GetMapping("/{id}")
-    public GymResponse getById(@PathVariable UUID id) {
-        Gym gym = gymService.getById(id);
-        return new GymResponse(gym.getId(), gym.getName(), gym.getPlan(), gym.getCreatedAt());
+    public GymResponse getById(@PathVariable Long id) {
+        return toResponse(gymService.getById(id));
     }
 
     @PutMapping("/{id}")
-    public GymResponse update(@PathVariable UUID id, @RequestBody UpdateGymRequest request) {
+    public GymResponse update(@PathVariable Long id, @Valid @RequestBody UpdateGymRequest request) {
         Gym updated = gymService.update(id, request.getName(), request.getPlan());
-        return new GymResponse(updated.getId(), updated.getName(), updated.getPlan(), updated.getCreatedAt());
+        return toResponse(updated);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable UUID id) {
+    public void delete(@PathVariable Long id) {
         gymService.delete(id);
     }
 
-
+    private GymResponse toResponse(Gym gym) {
+        return new GymResponse(
+                gym.getId(),
+                gym.getName(),
+                gym.getPlan(),
+                gym.getCreatedAt()
+        );
+    }
 }

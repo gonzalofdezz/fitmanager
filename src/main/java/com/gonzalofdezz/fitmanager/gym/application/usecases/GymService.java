@@ -6,7 +6,6 @@ import com.gonzalofdezz.fitmanager.gym.domain.enums.GymPlan;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 public class GymService {
 
@@ -18,7 +17,6 @@ public class GymService {
 
     public Gym create(String name, GymPlan plan) {
         Gym gym = new Gym();
-        gym.setId(UUID.randomUUID());
         gym.setName(name);
         gym.setPlan(plan);
         gym.setCreatedAt(LocalDateTime.now());
@@ -29,13 +27,14 @@ public class GymService {
         return repository.findAll();
     }
 
-    public Gym getById(UUID id) {
-        return repository.findById(id).orElseThrow(() -> new RuntimeException("Gym not found"));
+    public Gym getById(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Gym not found with id: " + id));
     }
 
-    public Gym update(UUID id, String name, GymPlan plan) {
+    public Gym update(Long id, String name, GymPlan plan) {
         Gym existing = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Gym not found"));
+                .orElseThrow(() -> new RuntimeException("Gym not found with id: " + id));
 
         existing.setName(name);
         existing.setPlan(plan);
@@ -43,12 +42,10 @@ public class GymService {
         return repository.save(existing);
     }
 
-    public void delete(UUID id) {
+    public void delete(Long id) {
         if (!repository.existsById(id)) {
-            throw new RuntimeException("Gym not found");
+            throw new RuntimeException("Gym not found with id: " + id);
         }
         repository.deleteById(id);
     }
-
-
 }

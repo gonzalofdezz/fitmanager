@@ -7,16 +7,16 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Component
 public class GymJpaAdapter implements GymRepositoryPort {
 
     private final GymSpringDataRepository repository;
-    private final GymMapper mapper = new GymMapper();
+    private final GymMapper mapper;
 
-    public GymJpaAdapter(GymSpringDataRepository repository) {
+    public GymJpaAdapter(GymSpringDataRepository repository, GymMapper mapper) {
         this.repository = repository;
+        this.mapper = mapper;
     }
 
     @Override
@@ -27,22 +27,25 @@ public class GymJpaAdapter implements GymRepositoryPort {
 
     @Override
     public List<Gym> findAll() {
-        return repository.findAll().stream().map(mapper::toDomain).toList();
+        return repository.findAll()
+                .stream()
+                .map(mapper::toDomain)
+                .toList();
     }
 
     @Override
-    public Optional<Gym> findById(UUID id) {
-        return repository.findById(id).map(mapper::toDomain);
+    public Optional<Gym> findById(Long id) {
+        return repository.findById(id)
+                .map(mapper::toDomain);
     }
 
     @Override
-    public void deleteById(UUID id) {
-        repository.deleteById(id);
-    }
-
-    @Override
-    public boolean existsById(UUID id) {
+    public boolean existsById(Long id) {
         return repository.existsById(id);
     }
 
+    @Override
+    public void deleteById(Long id) {
+        repository.deleteById(id);
+    }
 }
