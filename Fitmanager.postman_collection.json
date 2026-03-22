@@ -172,8 +172,118 @@
           ]
         }
       ]
+    },
+    {
+      "name": "Suscripciones",
+      "item": [
+        {
+          "name": "Obtener suscripción por usuario",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200 or 404', function () {",
+                  "    pm.expect([200, 404]).to.include(pm.response.code);",
+                  "});",
+                  "",
+                  "if (pm.response.code === 200) {",
+                  "    pm.test('Response has required fields', function () {",
+                  "        var jsonData = pm.response.json();",
+                  "        pm.expect(jsonData).to.have.property('id');",
+                  "        pm.expect(jsonData).to.have.property('usuarioId');",
+                  "        pm.expect(jsonData).to.have.property('tipoPlan');",
+                  "        pm.expect(jsonData).to.have.property('fechaInicio');",
+                  "        pm.expect(jsonData).to.have.property('fechaFin');",
+                  "        pm.expect(jsonData).to.have.property('activa');",
+                  "    });",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/suscripciones/550e8400-e29b-41d4-a716-446655440000",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "suscripciones",
+                "550e8400-e29b-41d4-a716-446655440000"
+              ]
+            },
+            "description": "Obtiene la información de la suscripción de un usuario"
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/suscripciones/550e8400-e29b-41d4-a716-446655440000",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "suscripciones",
+                    "550e8400-e29b-41d4-a716-446655440000"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"550e8400-e29b-41d4-a716-446655440002\",\n  \"usuarioId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"tipoPlan\": \"PREMIUM\",\n  \"fechaInicio\": \"2026-01-01T00:00:00\",\n  \"fechaFin\": \"2026-12-31T23:59:59\",\n  \"activa\": true,\n  \"fechaCreacion\": \"2026-01-01T10:00:00\"\n}"
+            },
+            {
+              "name": "404 Not Found",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/suscripciones/550e8400-e29b-41d4-a716-000000000000",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "suscripciones",
+                    "550e8400-e29b-41d4-a716-000000000000"
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
-  ],
   "variable": [
     {
       "key": "baseUrl",

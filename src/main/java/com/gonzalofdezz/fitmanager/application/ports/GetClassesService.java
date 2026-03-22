@@ -1,4 +1,4 @@
-package com.gonzalofdezz.fitmanager.application.ports.input;
+package com.gonzalofdezz.fitmanager.application.ports;
 
 import com.gonzalofdezz.fitmanager.application.ports.output.LoadClassesOutputPort;
 import com.gonzalofdezz.fitmanager.application.usecases.GetClassesUseCase;

@@ -1,6 +1,7 @@
 package com.gonzalofdezz.fitmanager.application.usecases;
 
-import com.gonzalofdezz.fitmanager.application.ports.output.ReservaRepositoryPort;
+import com.gonzalofdezz.fitmanager.application.ports.input.ReservasInputPort;
+import com.gonzalofdezz.fitmanager.application.ports.output.ReservaRepositoryOutputPort;
 import com.gonzalofdezz.fitmanager.domain.entity.Reserva;
 import org.springframework.stereotype.Service;
 
@@ -8,12 +9,12 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
-public class ReservaService implements CrearReservaUseCase {
+public class ReservaService implements CrearReservaUseCase, ReservasInputPort {
 
-    private final ReservaRepositoryPort reservaRepositoryPort;
+    private final ReservaRepositoryOutputPort reservaRepositoryOutputPort;
 
-    public ReservaService(ReservaRepositoryPort reservaRepositoryPort) {
-        this.reservaRepositoryPort = reservaRepositoryPort;
+    public ReservaService(ReservaRepositoryOutputPort reservaRepositoryOutputPort) {
+        this.reservaRepositoryOutputPort = reservaRepositoryOutputPort;
     }
 
     @Override
@@ -25,7 +26,12 @@ public class ReservaService implements CrearReservaUseCase {
                 fechaReserva,
                 LocalDateTime.now()
         );
-        return reservaRepositoryPort.guardar(reserva);
+        return reservaRepositoryOutputPort.guardar(reserva);
+    }
+
+    @Override
+    public Reserva crearReserva(UUID usuarioId, Long claseId, LocalDateTime fechaReserva) {
+        return crear(usuarioId, claseId, fechaReserva);
     }
 }
 

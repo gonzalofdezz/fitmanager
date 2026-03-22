@@ -2,7 +2,7 @@ package com.gonzalofdezz.fitmanager.config;
 
 import com.gonzalofdezz.fitmanager.application.ports.output.LoadClassesOutputPort;
 import com.gonzalofdezz.fitmanager.application.usecases.GetClassesUseCase;
-import com.gonzalofdezz.fitmanager.application.ports.input.GetClassesService;
+import com.gonzalofdezz.fitmanager.application.ports.GetClassesService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
