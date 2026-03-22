@@ -75,7 +75,99 @@
                   "value": "application/json"
                 }
               ],
-              "body": "[\n  {\n    \"id\": 1,\n    \"name\": \"Yoga\",\n    \"description\": \"Clase de yoga relajante\",\n    \"level\": \"BEGINNER\",\n    \"durationMinutes\": 60,\n    \"defaultCapacity\": 20\n  },\n  {\n    \"id\": 2,\n    \"name\": \"Crossfit\",\n    \"description\": \"Entrenamiento de alta intensidad\",\n    \"level\": \"ADVANCED\",\n    \"durationMinutes\": 45,\n    \"defaultCapacity\": 15\n  }\n]"
+              "body": "[\n  {\n    \"id\": 1,\n    \"nombre\": \"Yoga\",\n    \"descripcion\": \"Clase de yoga relajante\",\n    \"nivel\": \"BEGINNER\",\n    \"duracionMinutos\": 60,\n    \"capacidadPorDefecto\": 20\n  },\n  {\n    \"id\": 2,\n    \"nombre\": \"Crossfit\",\n    \"descripcion\": \"Entrenamiento de alta intensidad\",\n    \"nivel\": \"ADVANCED\",\n    \"duracionMinutos\": 45,\n    \"capacidadPorDefecto\": 15\n  }\n]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Reservas",
+      "item": [
+        {
+          "name": "Crear reserva",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 201', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test('Response has required fields', function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('id');",
+                  "    pm.expect(jsonData).to.have.property('usuarioId');",
+                  "    pm.expect(jsonData).to.have.property('claseId');",
+                  "    pm.expect(jsonData).to.have.property('fechaReserva');",
+                  "    pm.expect(jsonData).to.have.property('fechaCreacion');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"usuarioId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"claseId\": 1,\n  \"fechaReserva\": \"2026-03-25T10:30:00\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/reservas",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "reservas"
+              ]
+            },
+            "description": "Crea una nueva reserva para una clase"
+          },
+          "response": [
+            {
+              "name": "201 Created",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"usuarioId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"claseId\": 1,\n  \"fechaReserva\": \"2026-03-25T10:30:00\"\n}"
+                },
+                "url": {
+                  "raw": "http://localhost:8080/reservas",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "reservas"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"550e8400-e29b-41d4-a716-446655440001\",\n  \"usuarioId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"claseId\": 1,\n  \"fechaReserva\": \"2026-03-25T10:30:00\",\n  \"fechaCreacion\": \"2026-03-22T13:16:43\"\n}"
             }
           ]
         }

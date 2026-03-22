@@ -1,7 +1,7 @@
 package com.gonzalofdezz.fitmanager.infrastructure.adapters.input.rest;
 
 import com.gonzalofdezz.fitmanager.application.usecases.GetClassesUseCase;
-import com.gonzalofdezz.fitmanager.application.dto.ClassResponse;
+import com.gonzalofdezz.fitmanager.application.dto.ClassResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,15 +23,15 @@ public class ClassController {
 
     @GetMapping
     @Operation(summary = "Obtiene todas las clases disponibles del gimnasio")
-    public List<ClassResponse> getClasses() {
+    public List<ClassResponseDTO> getClasses() {
         return getClassesUseCase.execute().stream()
-                .map(gymClass -> new ClassResponse(
+                .map(gymClass -> new ClassResponseDTO(
                         gymClass.id(),
-                        gymClass.name(),
-                        gymClass.description(),
-                        gymClass.level(),
-                        gymClass.durationMinutes(),
-                        gymClass.defaultCapacity()
+                        gymClass.nombre(),
+                        gymClass.descripcion(),
+                        gymClass.nivel(),
+                        gymClass.duracionMinutos(),
+                        gymClass.capacidadPorDefecto()
                 ))
                 .toList();
     }

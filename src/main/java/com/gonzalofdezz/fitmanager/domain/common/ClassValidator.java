@@ -11,19 +11,19 @@ public class ClassValidator {
             throw new IllegalArgumentException("GymClass cannot be null");
         }
 
-        if (gymClass.name() == null || gymClass.name().isBlank()) {
+        if (gymClass.nombre() == null || gymClass.nombre().isBlank()) {
             throw new IllegalArgumentException("Class name cannot be empty");
         }
 
-        if (gymClass.durationMinutes() == null || gymClass.durationMinutes() <= 0) {
+        if (gymClass.duracionMinutos() == null || gymClass.duracionMinutos() <= 0) {
             throw new IllegalArgumentException("Duration must be greater than 0");
         }
 
-        if (gymClass.defaultCapacity() == null || gymClass.defaultCapacity() <= 0) {
+        if (gymClass.capacidadPorDefecto() == null || gymClass.capacidadPorDefecto() <= 0) {
             throw new IllegalArgumentException("Capacity must be greater than 0");
         }
 
-        if (gymClass.level() == null || gymClass.level().isBlank()) {
+        if (gymClass.nivel() == null || gymClass.nivel().isBlank()) {
             throw new IllegalArgumentException("Level cannot be empty");
         }
     }

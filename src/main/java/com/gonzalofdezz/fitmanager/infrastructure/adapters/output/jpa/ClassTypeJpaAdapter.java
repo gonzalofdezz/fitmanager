@@ -1,6 +1,6 @@
 package com.gonzalofdezz.fitmanager.infrastructure.adapters.output.jpa;
 
-import com.gonzalofdezz.fitmanager.application.ports.output.LoadClassesPort;
+import com.gonzalofdezz.fitmanager.application.ports.output.LoadClassesOutputPort;
 import com.gonzalofdezz.fitmanager.infrastructure.adapters.output.jpa.repository.ClassTypeRepository;
 import com.gonzalofdezz.fitmanager.infrastructure.adapters.output.jpa.mapper.ClassTypeJpaMapper;
 import com.gonzalofdezz.fitmanager.domain.entity.GymClass;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class ClassTypeJpaAdapter implements LoadClassesPort {
+public class ClassTypeJpaAdapter implements LoadClassesOutputPort {
 
     private final ClassTypeRepository classTypeRepository;
     private final ClassTypeJpaMapper classTypeJpaMapper;

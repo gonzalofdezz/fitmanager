@@ -1,6 +1,6 @@
-package com.gonzalofdezz.fitmanager.domain.entity;
+package com.gonzalofdezz.fitmanager.application.dto;
 
-public record GymClass(
+public record ClassResponseDTO(
         Long id,
         String nombre,
         String descripcion,

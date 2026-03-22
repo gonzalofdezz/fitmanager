@@ -1,6 +1,6 @@
 package com.gonzalofdezz.fitmanager.application.ports.input;
 
-import com.gonzalofdezz.fitmanager.application.ports.output.LoadClassesPort;
+import com.gonzalofdezz.fitmanager.application.ports.output.LoadClassesOutputPort;
 import com.gonzalofdezz.fitmanager.application.usecases.GetClassesUseCase;
 import com.gonzalofdezz.fitmanager.domain.entity.GymClass;
 
@@ -8,14 +8,14 @@ import java.util.List;
 
 public class GetClassesService implements GetClassesUseCase {
 
-    private final LoadClassesPort loadClassesPort;
+    private final LoadClassesOutputPort loadClassesOutputPort;
 
-    public GetClassesService(LoadClassesPort loadClassesPort) {
-        this.loadClassesPort = loadClassesPort;
+    public GetClassesService(LoadClassesOutputPort loadClassesPort) {
+        this.loadClassesOutputPort = loadClassesPort;
     }
 
     @Override
     public List<GymClass> execute() {
-        return loadClassesPort.findAll();
+        return loadClassesOutputPort.findAll();
     }
 }

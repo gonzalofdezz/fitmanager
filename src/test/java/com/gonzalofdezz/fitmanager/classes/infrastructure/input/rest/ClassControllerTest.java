@@ -22,7 +22,7 @@ class ClassControllerTest {
         mockMvc.perform(get("/clases"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(5))
-                .andExpect(jsonPath("$[0].name").value("Boxeo"))
-                .andExpect(jsonPath("$[1].name").value("Yoga"));
+                .andExpect(jsonPath("$[0].nombre").value("Boxeo"))
+                .andExpect(jsonPath("$[1].nombre").value("Yoga"));
     }
 }

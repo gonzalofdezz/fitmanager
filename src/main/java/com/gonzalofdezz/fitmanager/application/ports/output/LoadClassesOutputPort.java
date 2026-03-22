@@ -4,7 +4,7 @@ import com.gonzalofdezz.fitmanager.domain.entity.GymClass;
 
 import java.util.List;
 
-public interface LoadClassesPort {
+public interface LoadClassesOutputPort {
 
     List<GymClass> findAll();
 }
