@@ -1,7 +1,8 @@
 package com.gonzalofdezz.fitmanager.config;
 
-import com.gonzalofdezz.fitmanager.gym.application.ports.output.GymRepositoryPort;
-import com.gonzalofdezz.fitmanager.gym.application.usecases.GymService;
+import com.gonzalofdezz.fitmanager.application.usecases.GetClassesUseCase;
+import com.gonzalofdezz.fitmanager.application.ports.output.LoadClassesPort;
+import com.gonzalofdezz.fitmanager.application.ports.input.GetClassesService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -9,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 public class ApplicationConfiguration {
 
     @Bean
-    public GymService gymService(GymRepositoryPort gymRepositoryPort) {
-        return new GymService(gymRepositoryPort);
+    public GetClassesUseCase getClassesUseCase(LoadClassesPort loadClassesPort) {
+        return new GetClassesService(loadClassesPort);
     }
 }
