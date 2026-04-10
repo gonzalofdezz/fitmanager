@@ -1,13 +1,17 @@
 package com.gonzalofdezz.fitmanager.infrastructure.adapters.input.rest;
 
-import com.gonzalofdezz.fitmanager.application.dto.CrearReservaDTO;
-import com.gonzalofdezz.fitmanager.application.dto.ReservaResponseDTO;
+import com.gonzalofdezz.fitmanager.application.dto.*;
+import com.gonzalofdezz.fitmanager.application.ports.input.ReservasInputPort;
 import com.gonzalofdezz.fitmanager.application.usecases.CrearReservaUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/reservas")
@@ -15,9 +19,11 @@ import org.springframework.web.bind.annotation.*;
 public class ReservaController {
 
     private final CrearReservaUseCase crearReservaUseCase;
+    private final ReservasInputPort reservasInputPort;
 
-    public ReservaController(CrearReservaUseCase crearReservaUseCase) {
+    public ReservaController(CrearReservaUseCase crearReservaUseCase, ReservasInputPort reservasInputPort) {
         this.crearReservaUseCase = crearReservaUseCase;
+        this.reservasInputPort = reservasInputPort;
     }
 
     @PostMapping
@@ -37,6 +43,35 @@ public class ReservaController {
                 reserva.fechaReserva(),
                 reserva.fechaCreacion()
         );
+    }
+
+    @GetMapping("/usuario/{usuarioId}")
+    @Operation(summary = "Lista todas las reservas de un usuario")
+    public List<ListarReservasUsuarioDTO> listarPorUsuario(@PathVariable UUID usuarioId) {
+        return reservasInputPort.listarPorUsuario(usuarioId)
+                .stream()
+                .map(r -> new ListarReservasUsuarioDTO(
+                        r.id(),
+                        r.usuarioId(),
+                        r.claseId(),
+                        r.fechaReserva(),
+                        "ACTIVA",
+                        r.fechaCreacion()
+                ))
+                .toList();
+    }
+
+    @DeleteMapping("/{reservaId}")
+    @Operation(summary = "Cancela una reserva existente")
+    public ResponseEntity<Void> cancelarReserva(@PathVariable UUID reservaId) {
+        reservasInputPort.cancelarReserva(reservaId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/clases/{claseId}/disponibilidad")
+    @Operation(summary = "Obtiene la disponibilidad de una clase")
+    public DisponibilidadClaseDTO obtenerDisponibilidad(@PathVariable Long claseId) {
+        return reservasInputPort.obtenerDisponibilidad(claseId);
     }
 }
 

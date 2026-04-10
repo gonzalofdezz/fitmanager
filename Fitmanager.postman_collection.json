@@ -11,165 +11,47 @@
       "item": [
         {
           "name": "Obtener todas las clases",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "pm.test('Status code is 200', function () {",
-                  "    pm.response.to.have.status(200);",
-                  "});",
-                  "",
-                  "pm.test('Response is an array', function () {",
-                  "    var jsonData = pm.response.json();",
-                  "    pm.expect(jsonData).to.be.an('array');",
-                  "});"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
           "request": {
             "method": "GET",
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json",
-                "type": "text"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/clases",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "clases"
-              ]
-            },
+            "header": [{"key": "Accept", "value": "application/json", "type": "text"}],
+            "url": {"raw": "{{baseUrl}}/clases", "host": ["{{baseUrl}}"], "path": ["clases"]},
             "description": "Obtiene todas las clases disponibles del gimnasio"
-          },
-          "response": [
-            {
-              "name": "200 OK",
-              "originalRequest": {
-                "method": "GET",
-                "header": [],
-                "url": {
-                  "raw": "http://localhost:8080/clases",
-                  "protocol": "http",
-                  "host": [
-                    "localhost"
-                  ],
-                  "port": "8080",
-                  "path": [
-                    "clases"
-                  ]
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "[\n  {\n    \"id\": 1,\n    \"nombre\": \"Yoga\",\n    \"descripcion\": \"Clase de yoga relajante\",\n    \"nivel\": \"BEGINNER\",\n    \"duracionMinutos\": 60,\n    \"capacidadPorDefecto\": 20\n  },\n  {\n    \"id\": 2,\n    \"nombre\": \"Crossfit\",\n    \"descripcion\": \"Entrenamiento de alta intensidad\",\n    \"nivel\": \"ADVANCED\",\n    \"duracionMinutos\": 45,\n    \"capacidadPorDefecto\": 15\n  }\n]"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "Reservas",
-      "item": [
+          }
+        },
         {
-          "name": "Crear reserva",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "pm.test('Status code is 201', function () {",
-                  "    pm.response.to.have.status(201);",
-                  "});",
-                  "",
-                  "pm.test('Response has required fields', function () {",
-                  "    var jsonData = pm.response.json();",
-                  "    pm.expect(jsonData).to.have.property('id');",
-                  "    pm.expect(jsonData).to.have.property('usuarioId');",
-                  "    pm.expect(jsonData).to.have.property('claseId');",
-                  "    pm.expect(jsonData).to.have.property('fechaReserva');",
-                  "    pm.expect(jsonData).to.have.property('fechaCreacion');",
-                  "});"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
+          "name": "Obtener clase por ID",
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Accept", "value": "application/json", "type": "text"}],
+            "url": {"raw": "{{baseUrl}}/clases/1", "host": ["{{baseUrl}}"], "path": ["clases", "1"]},
+            "description": "Obtiene una clase específica por su ID"
+          }
+        },
+        {
+          "name": "Crear clase",
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json",
-                "type": "text"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json",
-                "type": "text"
-              }
-            ],
+            "header": [{"key": "Content-Type", "value": "application/json", "type": "text"}],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"usuarioId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"claseId\": 1,\n  \"fechaReserva\": \"2026-03-25T10:30:00\"\n}"
+              "raw": "{\n  \"nombre\": \"Pilates\",\n  \"descripcion\": \"Clase de pilates avanzada\",\n  \"nivel\": \"AVANZADO\",\n  \"duracionMinutos\": 50,\n  \"capacidadPorDefecto\": 15\n}"
             },
-            "url": {
-              "raw": "{{baseUrl}}/reservas",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "reservas"
-              ]
+            "url": {"raw": "{{baseUrl}}/clases", "host": ["{{baseUrl}}"], "path": ["clases"]},
+            "description": "Crea una nueva clase"
+          }
+        },
+        {
+          "name": "Editar clase",
+          "request": {
+            "method": "PUT",
+            "header": [{"key": "Content-Type", "value": "application/json", "type": "text"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Pilates\",\n  \"descripcion\": \"Clase de pilates para todos\",\n  \"nivel\": \"INTERMEDIO\",\n  \"duracionMinutos\": 45,\n  \"capacidadPorDefecto\": 18\n}"
             },
-            "description": "Crea una nueva reserva para una clase"
-          },
-          "response": [
-            {
-              "name": "201 Created",
-              "originalRequest": {
-                "method": "POST",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"usuarioId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"claseId\": 1,\n  \"fechaReserva\": \"2026-03-25T10:30:00\"\n}"
-                },
-                "url": {
-                  "raw": "http://localhost:8080/reservas",
-                  "protocol": "http",
-                  "host": [
-                    "localhost"
-                  ],
-                  "port": "8080",
-                  "path": [
-                    "reservas"
-                  ]
-                }
-              },
-              "status": "Created",
-              "code": 201,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"id\": \"550e8400-e29b-41d4-a716-446655440001\",\n  \"usuarioId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"claseId\": 1,\n  \"fechaReserva\": \"2026-03-25T10:30:00\",\n  \"fechaCreacion\": \"2026-03-22T13:16:43\"\n}"
-            }
-          ]
+            "url": {"raw": "{{baseUrl}}/clases/1", "host": ["{{baseUrl}}"], "path": ["clases", "1"]},
+            "description": "Edita una clase existente"
+          }
         }
       ]
     },
@@ -178,109 +60,265 @@
       "item": [
         {
           "name": "Obtener suscripción por usuario",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "pm.test('Status code is 200 or 404', function () {",
-                  "    pm.expect([200, 404]).to.include(pm.response.code);",
-                  "});",
-                  "",
-                  "if (pm.response.code === 200) {",
-                  "    pm.test('Response has required fields', function () {",
-                  "        var jsonData = pm.response.json();",
-                  "        pm.expect(jsonData).to.have.property('id');",
-                  "        pm.expect(jsonData).to.have.property('usuarioId');",
-                  "        pm.expect(jsonData).to.have.property('tipoPlan');",
-                  "        pm.expect(jsonData).to.have.property('fechaInicio');",
-                  "        pm.expect(jsonData).to.have.property('fechaFin');",
-                  "        pm.expect(jsonData).to.have.property('activa');",
-                  "    });",
-                  "}"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
           "request": {
             "method": "GET",
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json",
-                "type": "text"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/suscripciones/550e8400-e29b-41d4-a716-446655440000",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "suscripciones",
-                "550e8400-e29b-41d4-a716-446655440000"
-              ]
-            },
+            "header": [{"key": "Accept", "value": "application/json", "type": "text"}],
+            "url": {"raw": "{{baseUrl}}/suscripciones/550e8400-e29b-41d4-a716-446655440000", "host": ["{{baseUrl}}"], "path": ["suscripciones", "550e8400-e29b-41d4-a716-446655440000"]},
             "description": "Obtiene la información de la suscripción de un usuario"
-          },
-          "response": [
-            {
-              "name": "200 OK",
-              "originalRequest": {
-                "method": "GET",
-                "header": [],
-                "url": {
-                  "raw": "http://localhost:8080/suscripciones/550e8400-e29b-41d4-a716-446655440000",
-                  "protocol": "http",
-                  "host": [
-                    "localhost"
-                  ],
-                  "port": "8080",
-                  "path": [
-                    "suscripciones",
-                    "550e8400-e29b-41d4-a716-446655440000"
-                  ]
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"id\": \"550e8400-e29b-41d4-a716-446655440002\",\n  \"usuarioId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"tipoPlan\": \"PREMIUM\",\n  \"fechaInicio\": \"2026-01-01T00:00:00\",\n  \"fechaFin\": \"2026-12-31T23:59:59\",\n  \"activa\": true,\n  \"fechaCreacion\": \"2026-01-01T10:00:00\"\n}"
+          }
+        },
+        {
+          "name": "Crear suscripción",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json", "type": "text"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"usuarioId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"tipoPlan\": \"PREMIUM\",\n  \"fechaInicio\": \"2026-01-01T10:00:00\",\n  \"fechaFin\": \"2026-12-31T23:59:59\"\n}"
             },
-            {
-              "name": "404 Not Found",
-              "originalRequest": {
-                "method": "GET",
-                "header": [],
-                "url": {
-                  "raw": "http://localhost:8080/suscripciones/550e8400-e29b-41d4-a716-000000000000",
-                  "protocol": "http",
-                  "host": [
-                    "localhost"
-                  ],
-                  "port": "8080",
-                  "path": [
-                    "suscripciones",
-                    "550e8400-e29b-41d4-a716-000000000000"
-                  ]
-                }
-              },
-              "status": "Not Found",
-              "code": 404,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ]
-            }
-          ]
+            "url": {"raw": "{{baseUrl}}/suscripciones", "host": ["{{baseUrl}}"], "path": ["suscripciones"]},
+            "description": "Crea una nueva suscripción"
+          }
+        },
+        {
+          "name": "Anular suscripción",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {"raw": "{{baseUrl}}/suscripciones/550e8400-e29b-41d4-a716-446655440002", "host": ["{{baseUrl}}"], "path": ["suscripciones", "550e8400-e29b-41d4-a716-446655440002"]},
+            "description": "Anula una suscripción existente"
+          }
+        },
+        {
+          "name": "Renovar suscripción",
+          "request": {
+            "method": "PUT",
+            "header": [{"key": "Content-Type", "value": "application/json", "type": "text"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tipoPlan\": \"PREMIUM\",\n  \"fechaFin\": \"2027-12-31T23:59:59\"\n}"
+            },
+            "url": {"raw": "{{baseUrl}}/suscripciones/550e8400-e29b-41d4-a716-446655440002/renovar", "host": ["{{baseUrl}}"], "path": ["suscripciones", "550e8400-e29b-41d4-a716-446655440002", "renovar"]},
+            "description": "Renueva una suscripción existente"
+          }
+        },
+        {
+          "name": "Actualizar plan",
+          "request": {
+            "method": "PUT",
+            "header": [{"key": "Content-Type", "value": "application/json", "type": "text"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tipoPlan\": \"BASIC\"\n}"
+            },
+            "url": {"raw": "{{baseUrl}}/suscripciones/550e8400-e29b-41d4-a716-446655440002/plan", "host": ["{{baseUrl}}"], "path": ["suscripciones", "550e8400-e29b-41d4-a716-446655440002", "plan"]},
+            "description": "Actualiza el tipo de plan de una suscripción"
+          }
+        },
+        {
+          "name": "Listar suscripciones por usuario",
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Accept", "value": "application/json", "type": "text"}],
+            "url": {"raw": "{{baseUrl}}/suscripciones/usuario/550e8400-e29b-41d4-a716-446655440000", "host": ["{{baseUrl}}"], "path": ["suscripciones", "usuario", "550e8400-e29b-41d4-a716-446655440000"]},
+            "description": "Lista todas las suscripciones de un usuario"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reservas",
+      "item": [
+        {
+          "name": "Crear reserva",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json", "type": "text"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"usuarioId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"claseId\": 1,\n  \"fechaReserva\": \"2026-03-25T10:30:00\"\n}"
+            },
+            "url": {"raw": "{{baseUrl}}/reservas", "host": ["{{baseUrl}}"], "path": ["reservas"]},
+            "description": "Crea una nueva reserva para una clase"
+          }
+        },
+        {
+          "name": "Listar reservas por usuario",
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Accept", "value": "application/json", "type": "text"}],
+            "url": {"raw": "{{baseUrl}}/reservas/usuario/550e8400-e29b-41d4-a716-446655440000", "host": ["{{baseUrl}}"], "path": ["reservas", "usuario", "550e8400-e29b-41d4-a716-446655440000"]},
+            "description": "Lista todas las reservas de un usuario"
+          }
+        },
+        {
+          "name": "Cancelar reserva",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {"raw": "{{baseUrl}}/reservas/550e8400-e29b-41d4-a716-446655440001", "host": ["{{baseUrl}}"], "path": ["reservas", "550e8400-e29b-41d4-a716-446655440001"]},
+            "description": "Cancela una reserva existente"
+          }
+        },
+        {
+          "name": "Obtener disponibilidad de clase",
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Accept", "value": "application/json", "type": "text"}],
+            "url": {"raw": "{{baseUrl}}/reservas/clases/1/disponibilidad", "host": ["{{baseUrl}}"], "path": ["reservas", "clases", "1", "disponibilidad"]},
+            "description": "Obtiene la disponibilidad de una clase"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Pagos",
+      "item": [
+        {
+          "name": "Iniciar pago",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json", "type": "text"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"usuarioId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"plan\": \"PREMIUM\"\n}"
+            },
+            "url": {"raw": "{{baseUrl}}/pagos/iniciar", "host": ["{{baseUrl}}"], "path": ["pagos", "iniciar"]},
+            "description": "Inicia un pago para una suscripción. Planes disponibles: BASIC (30 días €9.99), PREMIUM (60 días €19.99), VIP (90 días €29.99)"
+          }
+        },
+        {
+          "name": "Confirmar pago (POST)",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json", "type": "text"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pagoId\": \"550e8400-e29b-41d4-a716-446655440005\",\n  \"estado\": \"COMPLETADO\"\n}"
+            },
+            "url": {"raw": "{{baseUrl}}/pagos/confirmar", "host": ["{{baseUrl}}"], "path": ["pagos", "confirmar"]},
+            "description": "Confirma un pago existente"
+          }
+        },
+        {
+          "name": "Confirmar pago FAKE (GET - DESARROLLO)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "{{baseUrl}}/pagos/550e8400-e29b-41d4-a716-446655440005/confirmar-fake", "host": ["{{baseUrl}}"], "path": ["pagos", "550e8400-e29b-41d4-a716-446655440005", "confirmar-fake"]},
+            "description": "Confirma un pago de forma rápida (SOLO DESARROLLO). Usa el pagoId del response de 'Iniciar pago'"
+          }
+        },
+        {
+          "name": "Obtener pago",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "{{baseUrl}}/pagos/550e8400-e29b-41d4-a716-446655440005", "host": ["{{baseUrl}}"], "path": ["pagos", "550e8400-e29b-41d4-a716-446655440005"]},
+            "description": "Obtiene la información de un pago"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Rutinas",
+      "item": [
+        {
+          "name": "Crear rutina",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json", "type": "text"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"usuarioId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"nombre\": \"Rutina Semanal\",\n  \"descripcion\": \"Mi rutina personalizada de entrenamiento\"\n}"
+            },
+            "url": {"raw": "{{baseUrl}}/rutinas", "host": ["{{baseUrl}}"], "path": ["rutinas"]},
+            "description": "Crea una nueva rutina"
+          }
+        },
+        {
+          "name": "Obtener rutina",
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Accept", "value": "application/json", "type": "text"}],
+            "url": {"raw": "{{baseUrl}}/rutinas/550e8400-e29b-41d4-a716-446655440003", "host": ["{{baseUrl}}"], "path": ["rutinas", "550e8400-e29b-41d4-a716-446655440003"]},
+            "description": "Obtiene una rutina específica"
+          }
+        },
+        {
+          "name": "Editar rutina",
+          "request": {
+            "method": "PUT",
+            "header": [{"key": "Content-Type", "value": "application/json", "type": "text"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Rutina Mejorada\",\n  \"descripcion\": \"Mi rutina mejorada\",\n  \"activa\": true\n}"
+            },
+            "url": {"raw": "{{baseUrl}}/rutinas/550e8400-e29b-41d4-a716-446655440003", "host": ["{{baseUrl}}"], "path": ["rutinas", "550e8400-e29b-41d4-a716-446655440003"]},
+            "description": "Edita una rutina existente"
+          }
+        },
+        {
+          "name": "Listar rutinas por usuario",
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Accept", "value": "application/json", "type": "text"}],
+            "url": {"raw": "{{baseUrl}}/rutinas/usuario/550e8400-e29b-41d4-a716-446655440000", "host": ["{{baseUrl}}"], "path": ["rutinas", "usuario", "550e8400-e29b-41d4-a716-446655440000"]},
+            "description": "Lista todas las rutinas de un usuario"
+          }
+        },
+        {
+          "name": "Eliminar rutina",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {"raw": "{{baseUrl}}/rutinas/550e8400-e29b-41d4-a716-446655440003", "host": ["{{baseUrl}}"], "path": ["rutinas", "550e8400-e29b-41d4-a716-446655440003"]},
+            "description": "Elimina una rutina"
+          }
+        },
+        {
+          "name": "Agregar ejercicio",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json", "type": "text"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombreEjercicio\": \"Flexiones\",\n  \"series\": 3,\n  \"repeticiones\": 10,\n  \"peso\": 0,\n  \"descansoSegundos\": 60\n}"
+            },
+            "url": {"raw": "{{baseUrl}}/rutinas/550e8400-e29b-41d4-a716-446655440003/ejercicios", "host": ["{{baseUrl}}"], "path": ["rutinas", "550e8400-e29b-41d4-a716-446655440003", "ejercicios"]},
+            "description": "Agrega un ejercicio a una rutina"
+          }
+        },
+        {
+          "name": "Listar ejercicios de rutina",
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Accept", "value": "application/json", "type": "text"}],
+            "url": {"raw": "{{baseUrl}}/rutinas/550e8400-e29b-41d4-a716-446655440003/ejercicios", "host": ["{{baseUrl}}"], "path": ["rutinas", "550e8400-e29b-41d4-a716-446655440003", "ejercicios"]},
+            "description": "Lista todos los ejercicios de una rutina"
+          }
+        },
+        {
+          "name": "Editar ejercicio",
+          "request": {
+            "method": "PUT",
+            "header": [{"key": "Content-Type", "value": "application/json", "type": "text"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombreEjercicio\": \"Flexiones\",\n  \"series\": 4,\n  \"repeticiones\": 15,\n  \"peso\": 0,\n  \"descansoSegundos\": 45\n}"
+            },
+            "url": {"raw": "{{baseUrl}}/rutinas/ejercicios/550e8400-e29b-41d4-a716-446655440004", "host": ["{{baseUrl}}"], "path": ["rutinas", "ejercicios", "550e8400-e29b-41d4-a716-446655440004"]},
+            "description": "Edita un ejercicio de una rutina"
+          }
+        },
+        {
+          "name": "Eliminar ejercicio",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {"raw": "{{baseUrl}}/rutinas/ejercicios/550e8400-e29b-41d4-a716-446655440004", "host": ["{{baseUrl}}"], "path": ["rutinas", "ejercicios", "550e8400-e29b-41d4-a716-446655440004"]},
+            "description": "Elimina un ejercicio de una rutina"
+          }
         }
       ]
     }
