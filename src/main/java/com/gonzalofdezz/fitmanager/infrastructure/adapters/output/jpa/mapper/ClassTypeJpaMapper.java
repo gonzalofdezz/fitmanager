@@ -15,6 +15,8 @@ public class ClassTypeJpaMapper {
                 entity.getLevel(),
                 entity.getDurationMinutes(),
                 entity.getDefaultCapacity(),
+                entity.getDayOfWeek(),
+                entity.getFecha(),
                 entity.getGymId()
         );
     }
@@ -29,6 +31,8 @@ public class ClassTypeJpaMapper {
         entity.setLevel(domain.nivel());
         entity.setDurationMinutes(domain.duracionMinutos());
         entity.setDefaultCapacity(domain.capacidadPorDefecto());
+        entity.setDayOfWeek(domain.diaSemana());
+        entity.setFecha(domain.fecha());
         entity.setGymId(domain.gymId());
         return entity;
     }

@@ -5,6 +5,8 @@ import com.gonzalofdezz.fitmanager.infrastructure.adapters.output.jpa.data.Class
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import java.time.LocalDate;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -22,6 +24,8 @@ class ClassTypeJpaMapperTest {
         ReflectionTestUtils.setField(entity, "level", "BEGINNER");
         ReflectionTestUtils.setField(entity, "durationMinutes", 60);
         ReflectionTestUtils.setField(entity, "defaultCapacity", 20);
+        ReflectionTestUtils.setField(entity, "dayOfWeek", "MONDAY");
+        ReflectionTestUtils.setField(entity, "fecha", LocalDate.of(2026, 4, 25));
 
         GymClass result = mapper.toDomain(entity);
 
@@ -31,12 +35,14 @@ class ClassTypeJpaMapperTest {
         assertThat(result.nivel()).isEqualTo("BEGINNER");
         assertThat(result.duracionMinutos()).isEqualTo(60);
         assertThat(result.capacidadPorDefecto()).isEqualTo(20);
+        assertThat(result.diaSemana()).isEqualTo("MONDAY");
+        assertThat(result.fecha()).isEqualTo(LocalDate.of(2026, 4, 25));
         assertThat(result.gymId()).isEqualTo(1L);
     }
 
     @Test
     void shouldThrowWhenMappingDomainToEntity() {
-        GymClass gymClass = new GymClass(1L, "Yoga", "Clase suave", "BEGINNER", 60, 20, 1L);
+        GymClass gymClass = new GymClass(1L, "Yoga", "Clase suave", "BEGINNER", 60, 20, "MONDAY", LocalDate.of(2026, 4, 25), 1L);
 
         assertThatThrownBy(() -> mapper.toEntity(gymClass))
                 .isInstanceOf(UnsupportedOperationException.class)

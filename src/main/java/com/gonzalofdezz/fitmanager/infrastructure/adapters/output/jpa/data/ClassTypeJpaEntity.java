@@ -1,6 +1,7 @@
 package com.gonzalofdezz.fitmanager.infrastructure.adapters.output.jpa.data;
 
 import jakarta.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "class_types")
@@ -27,6 +28,12 @@ public class ClassTypeJpaEntity {
 
     @Column(name = "default_capacity", nullable = false)
     private Integer defaultCapacity;
+
+    @Column(name = "day_of_week", nullable = false)
+    private String dayOfWeek;
+
+    @Column(nullable = false)
+    private LocalDate fecha;
 
     public ClassTypeJpaEntity() {
     }
@@ -59,6 +66,14 @@ public class ClassTypeJpaEntity {
         return defaultCapacity;
     }
 
+    public String getDayOfWeek() {
+        return dayOfWeek;
+    }
+
+    public LocalDate getFecha() {
+        return fecha;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -85,5 +100,13 @@ public class ClassTypeJpaEntity {
 
     public void setDefaultCapacity(Integer defaultCapacity) {
         this.defaultCapacity = defaultCapacity;
+    }
+
+    public void setDayOfWeek(String dayOfWeek) {
+        this.dayOfWeek = dayOfWeek;
+    }
+
+    public void setFecha(LocalDate fecha) {
+        this.fecha = fecha;
     }
 }

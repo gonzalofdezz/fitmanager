@@ -6,6 +6,7 @@ import com.gonzalofdezz.fitmanager.application.usecases.GetClassesUseCase;
 import com.gonzalofdezz.fitmanager.domain.entity.GymClass;
 import com.gonzalofdezz.fitmanager.domain.common.ResourceNotFoundException;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class GetClassesService implements GetClassesUseCase, ClassesInputPort {
@@ -42,6 +43,8 @@ public class GetClassesService implements GetClassesUseCase, ClassesInputPort {
                 nivel,
                 duracionMinutos,
                 capacidadPorDefecto,
+                "MONDAY",  // día por defecto
+                LocalDate.now(),  // fecha por defecto
                 1L  // gym_id por defecto
         );
         return loadClassesOutputPort.save(gymClass);
@@ -58,6 +61,8 @@ public class GetClassesService implements GetClassesUseCase, ClassesInputPort {
                 nivel,
                 duracionMinutos,
                 capacidadPorDefecto,
+                existente.diaSemana(),  // Mantener el día original
+                existente.fecha(),  // Mantener la fecha original
                 existente.gymId()  // Mantener el gym_id original
         );
         return loadClassesOutputPort.save(actualizada);
