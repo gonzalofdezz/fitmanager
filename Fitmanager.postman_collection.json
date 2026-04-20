@@ -9,19 +9,19 @@
     {
       "name": "Autenticación",
       "item": [
-        {
-          "name": "Registrar usuario",
-          "request": {
-            "method": "POST",
-            "header": [{"key": "Content-Type", "value": "application/json", "type": "text"}],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"nombre\": \"Juan Pérez\",\n  \"email\": \"juan@example.com\",\n  \"contrasena\": \"password123\"\n}"
-            },
-            "url": {"raw": "{{baseUrl}}/auth/registrar", "host": ["{{baseUrl}}"], "path": ["auth", "registrar"]},
-            "description": "Registra un nuevo usuario en el sistema"
-          }
-        },
+         {
+           "name": "Registrar usuario",
+           "request": {
+             "method": "POST",
+             "header": [{"key": "Content-Type", "value": "application/json", "type": "text"}],
+             "body": {
+               "mode": "raw",
+               "raw": "{\n  \"nombre\": \"Juan Pérez\",\n  \"email\": \"juan@example.com\",\n  \"contrasena\": \"password123\"\n}"
+             },
+             "url": {"raw": "{{baseUrl}}/auth/registrar", "host": ["{{baseUrl}}"], "path": ["auth", "registrar"]},
+             "description": "Registra un nuevo usuario en el sistema. Automáticamente se crea una suscripción con tipo NINGUNA que debe ser actualizada a BASICA, PREMIUM o VIP mediante compra"
+           }
+         },
         {
           "name": "Login",
           "request": {
@@ -116,19 +116,19 @@
             "description": "Obtiene la información de la suscripción de un usuario"
           }
         },
-        {
-          "name": "Crear suscripción",
-          "request": {
-            "method": "POST",
-            "header": [{"key": "Content-Type", "value": "application/json", "type": "text"}],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"usuarioId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"tipoPlan\": \"PREMIUM\",\n  \"fechaInicio\": \"2026-01-01T10:00:00\",\n  \"fechaFin\": \"2026-12-31T23:59:59\"\n}"
-            },
-            "url": {"raw": "{{baseUrl}}/suscripciones", "host": ["{{baseUrl}}"], "path": ["suscripciones"]},
-            "description": "Crea una nueva suscripción"
-          }
-        },
+         {
+           "name": "Crear suscripción",
+           "request": {
+             "method": "POST",
+             "header": [{"key": "Content-Type", "value": "application/json", "type": "text"}],
+             "body": {
+               "mode": "raw",
+               "raw": "{\n  \"usuarioId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"tipoPlan\": \"BASICA\",\n  \"fechaInicio\": \"2026-01-01T10:00:00\",\n  \"fechaFin\": \"2026-12-31T23:59:59\"\n}"
+             },
+             "url": {"raw": "{{baseUrl}}/suscripciones", "host": ["{{baseUrl}}"], "path": ["suscripciones"]},
+             "description": "Crea o actualiza una suscripción. Tipos disponibles: NINGUNA (sin suscripción), BASICA, PREMIUM, VIP. Nota: Si el usuario ya tiene suscripción, será actualizada automáticamente."
+           }
+         },
         {
           "name": "Anular suscripción",
           "request": {
@@ -138,32 +138,32 @@
             "description": "Anula una suscripción existente"
           }
         },
-        {
-          "name": "Renovar suscripción",
-          "request": {
-            "method": "PUT",
-            "header": [{"key": "Content-Type", "value": "application/json", "type": "text"}],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"tipoPlan\": \"PREMIUM\",\n  \"fechaFin\": \"2027-12-31T23:59:59\"\n}"
-            },
-            "url": {"raw": "{{baseUrl}}/suscripciones/550e8400-e29b-41d4-a716-446655440002/renovar", "host": ["{{baseUrl}}"], "path": ["suscripciones", "550e8400-e29b-41d4-a716-446655440002", "renovar"]},
-            "description": "Renueva una suscripción existente"
-          }
-        },
-        {
-          "name": "Actualizar plan",
-          "request": {
-            "method": "PUT",
-            "header": [{"key": "Content-Type", "value": "application/json", "type": "text"}],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"tipoPlan\": \"BASIC\"\n}"
-            },
-            "url": {"raw": "{{baseUrl}}/suscripciones/550e8400-e29b-41d4-a716-446655440002/plan", "host": ["{{baseUrl}}"], "path": ["suscripciones", "550e8400-e29b-41d4-a716-446655440002", "plan"]},
-            "description": "Actualiza el tipo de plan de una suscripción"
-          }
-        },
+         {
+           "name": "Renovar suscripción",
+           "request": {
+             "method": "PUT",
+             "header": [{"key": "Content-Type", "value": "application/json", "type": "text"}],
+             "body": {
+               "mode": "raw",
+               "raw": "{\n  \"tipoPlan\": \"BASICA\",\n  \"fechaFin\": \"2027-12-31T23:59:59\"\n}"
+             },
+             "url": {"raw": "{{baseUrl}}/suscripciones/550e8400-e29b-41d4-a716-446655440002/renovar", "host": ["{{baseUrl}}"], "path": ["suscripciones", "550e8400-e29b-41d4-a716-446655440002", "renovar"]},
+             "description": "Renueva una suscripción existente. Planes disponibles: BASICA, PREMIUM, VIP"
+           }
+         },
+         {
+           "name": "Actualizar plan",
+           "request": {
+             "method": "PUT",
+             "header": [{"key": "Content-Type", "value": "application/json", "type": "text"}],
+             "body": {
+               "mode": "raw",
+               "raw": "{\n  \"tipoPlan\": \"BASICA\"\n}"
+             },
+             "url": {"raw": "{{baseUrl}}/suscripciones/550e8400-e29b-41d4-a716-446655440002/plan", "host": ["{{baseUrl}}"], "path": ["suscripciones", "550e8400-e29b-41d4-a716-446655440002", "plan"]},
+             "description": "Actualiza el tipo de plan de una suscripción. Planes disponibles: NINGUNA, BASICA, PREMIUM, VIP"
+           }
+         },
         {
           "name": "Listar suscripciones por usuario",
           "request": {
@@ -223,19 +223,19 @@
     {
       "name": "Pagos",
       "item": [
-        {
-          "name": "Iniciar pago",
-          "request": {
-            "method": "POST",
-            "header": [{"key": "Content-Type", "value": "application/json", "type": "text"}],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"usuarioId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"plan\": \"PREMIUM\"\n}"
-            },
-            "url": {"raw": "{{baseUrl}}/pagos/iniciar", "host": ["{{baseUrl}}"], "path": ["pagos", "iniciar"]},
-            "description": "Inicia un pago para una suscripción. Planes disponibles: BASIC (30 días €9.99), PREMIUM (60 días €19.99), VIP (90 días €29.99)"
-          }
-        },
+         {
+           "name": "Iniciar pago",
+           "request": {
+             "method": "POST",
+             "header": [{"key": "Content-Type", "value": "application/json", "type": "text"}],
+             "body": {
+               "mode": "raw",
+               "raw": "{\n  \"usuarioId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"plan\": \"BASICA\"\n}"
+             },
+             "url": {"raw": "{{baseUrl}}/pagos/iniciar", "host": ["{{baseUrl}}"], "path": ["pagos", "iniciar"]},
+             "description": "Inicia un pago para una suscripción. Planes disponibles: BASICA (30 días €9.99), PREMIUM (60 días €19.99), VIP (90 días €29.99). Los usuarios nuevos comienzan con plan NINGUNA y deben comprar un plan."
+           }
+         },
         {
           "name": "Confirmar pago (POST)",
           "request": {

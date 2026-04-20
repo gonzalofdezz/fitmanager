@@ -25,7 +25,7 @@ class GetClassesServiceTest {
 
     @Test
     void shouldReturnClassesFromOutputPort() {
-        List<GymClass> expected = List.of(new GymClass(1L, "Yoga", "Clase", "BEGINNER", 60, 20));
+        List<GymClass> expected = List.of(new GymClass(1L, "Yoga", "Clase", "BEGINNER", 60, 20, 1L));
         when(loadClassesOutputPort.findAll()).thenReturn(expected);
 
         List<GymClass> result = getClassesService.execute();

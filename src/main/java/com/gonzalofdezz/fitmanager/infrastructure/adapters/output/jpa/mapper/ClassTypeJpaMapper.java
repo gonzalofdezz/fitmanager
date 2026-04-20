@@ -14,14 +14,23 @@ public class ClassTypeJpaMapper {
                 entity.getDescription(),
                 entity.getLevel(),
                 entity.getDurationMinutes(),
-                entity.getDefaultCapacity()
+                entity.getDefaultCapacity(),
+                entity.getGymId()
         );
     }
 
     public ClassTypeJpaEntity toEntity(GymClass domain) {
-        // This is a simple conversion - if you need full entity conversion,
-        // you'll need to implement entity creation/update logic
-        throw new UnsupportedOperationException("Entity creation not yet implemented");
+        ClassTypeJpaEntity entity = new ClassTypeJpaEntity();
+        if (domain.id() != null) {
+            entity.setId(domain.id());
+        }
+        entity.setName(domain.nombre());
+        entity.setDescription(domain.descripcion());
+        entity.setLevel(domain.nivel());
+        entity.setDurationMinutes(domain.duracionMinutos());
+        entity.setDefaultCapacity(domain.capacidadPorDefecto());
+        entity.setGymId(domain.gymId());
+        return entity;
     }
 }
 

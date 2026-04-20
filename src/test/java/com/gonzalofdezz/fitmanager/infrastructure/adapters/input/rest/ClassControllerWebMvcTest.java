@@ -31,8 +31,8 @@ class ClassControllerWebMvcTest {
     @Test
     void shouldReturnMappedClasses() throws Exception {
         when(getClassesUseCase.execute()).thenReturn(List.of(
-                new GymClass(1L, "Yoga", "Clase suave", "BEGINNER", 60, 20),
-                new GymClass(2L, "Boxeo", "Clase intensa", "ADVANCED", 45, 15)
+                new GymClass(1L, "Yoga", "Clase suave", "BEGINNER", 60, 20, 1L),
+                new GymClass(2L, "Boxeo", "Clase intensa", "ADVANCED", 45, 15, 1L)
         ));
 
         mockMvc.perform(get("/clases"))

@@ -1,8 +1,10 @@
 package com.gonzalofdezz.fitmanager.application.usecases;
 
 import com.gonzalofdezz.fitmanager.application.ports.input.AutenticacionInputPort;
+import com.gonzalofdezz.fitmanager.application.ports.input.SuscripcionesInputPort;
 import com.gonzalofdezz.fitmanager.application.ports.output.UsuarioRepositoryOutputPort;
 import com.gonzalofdezz.fitmanager.domain.entity.Usuario;
+import com.gonzalofdezz.fitmanager.domain.enums.TipoPlan;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -13,9 +15,12 @@ import java.util.UUID;
 public class AutenticacionService implements AutenticacionInputPort {
 
     private final UsuarioRepositoryOutputPort usuarioRepository;
+    private final SuscripcionesInputPort suscripcionesInputPort;
 
-    public AutenticacionService(UsuarioRepositoryOutputPort usuarioRepository) {
+    public AutenticacionService(UsuarioRepositoryOutputPort usuarioRepository,
+                                SuscripcionesInputPort suscripcionesInputPort) {
         this.usuarioRepository = usuarioRepository;
+        this.suscripcionesInputPort = suscripcionesInputPort;
     }
 
     @Override
@@ -37,7 +42,17 @@ public class AutenticacionService implements AutenticacionInputPort {
                 LocalDateTime.now()
         );
 
-        return usuarioRepository.save(usuario);
+        Usuario usuarioGuardado = usuarioRepository.save(usuario);
+
+        // Crear suscripción NINGUNA por defecto
+        suscripcionesInputPort.crearSuscripcion(
+                usuarioGuardado.id(),
+                TipoPlan.NINGUNA.name(),
+                null,
+                null
+        );
+
+        return usuarioGuardado;
     }
 
     @Override

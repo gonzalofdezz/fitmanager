@@ -1,5 +1,6 @@
 package com.gonzalofdezz.fitmanager.application.usecases;
 
+import com.gonzalofdezz.fitmanager.application.ports.input.SuscripcionesInputPort;
 import com.gonzalofdezz.fitmanager.application.ports.output.UsuarioRepositoryOutputPort;
 import com.gonzalofdezz.fitmanager.domain.entity.Usuario;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,11 +25,14 @@ class AutenticacionServiceTest {
     @Mock
     private UsuarioRepositoryOutputPort usuarioRepository;
 
+    @Mock
+    private SuscripcionesInputPort suscripcionesInputPort;
+
     private AutenticacionService autenticacionService;
 
     @BeforeEach
     void setUp() {
-        autenticacionService = new AutenticacionService(usuarioRepository);
+        autenticacionService = new AutenticacionService(usuarioRepository, suscripcionesInputPort);
     }
 
     @Test

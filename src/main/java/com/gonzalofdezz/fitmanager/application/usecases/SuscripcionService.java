@@ -32,16 +32,35 @@ public class SuscripcionService implements ObtenerSuscripcionUseCase, Suscripcio
 
     @Override
     public Suscripcion crearSuscripcion(UUID usuarioId, String tipoPlan, LocalDateTime fechaInicio, LocalDateTime fechaFin) {
-        Suscripcion suscripcion = new Suscripcion(
-                UUID.randomUUID(),
-                usuarioId,
-                tipoPlan,
-                fechaInicio,
-                fechaFin,
-                true,
-                LocalDateTime.now()
-        );
-        return suscripcionRepositoryOutputPort.guardar(suscripcion);
+        // Verificar si el usuario ya tiene una suscripción
+        Optional<Suscripcion> suscripcionExistente = suscripcionRepositoryOutputPort.obtenerPorUsuarioId(usuarioId);
+
+        if (suscripcionExistente.isPresent()) {
+            // Si existe, actualizar la suscripción existente
+            Suscripcion existente = suscripcionExistente.get();
+            Suscripcion actualizada = new Suscripcion(
+                    existente.id(),
+                    usuarioId,
+                    tipoPlan,
+                    fechaInicio,
+                    fechaFin,
+                    true,
+                    existente.fechaCreacion()
+            );
+            return suscripcionRepositoryOutputPort.guardar(actualizada);
+        } else {
+            // Si no existe, crear una nueva suscripción
+            Suscripcion suscripcion = new Suscripcion(
+                    UUID.randomUUID(),
+                    usuarioId,
+                    tipoPlan,
+                    fechaInicio,
+                    fechaFin,
+                    true,
+                    LocalDateTime.now()
+            );
+            return suscripcionRepositoryOutputPort.guardar(suscripcion);
+        }
     }
 
     @Override

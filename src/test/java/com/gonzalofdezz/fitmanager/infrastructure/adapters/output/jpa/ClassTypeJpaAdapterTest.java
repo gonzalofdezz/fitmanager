@@ -33,7 +33,7 @@ class ClassTypeJpaAdapterTest {
     @Test
     void shouldLoadAllClassesSortedById() {
         ClassTypeJpaEntity entity = new ClassTypeJpaEntity();
-        GymClass gymClass = new GymClass(1L, "Yoga", "Clase", "BEGINNER", 60, 20);
+        GymClass gymClass = new GymClass(1L, "Yoga", "Clase", "BEGINNER", 60, 20, 1L);
 
         when(classTypeRepository.findAll(any(Sort.class))).thenReturn(List.of(entity));
         when(classTypeJpaMapper.toDomain(entity)).thenReturn(gymClass);

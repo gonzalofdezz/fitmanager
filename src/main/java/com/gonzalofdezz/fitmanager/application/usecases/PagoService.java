@@ -31,20 +31,38 @@ public class PagoService implements PagosInputPort {
         try {
             PlanType planType = PlanType.valueOf(plan.toUpperCase());
             
-            // Crear suscripción temporal
+            // Obtener o crear la suscripción del usuario
+            var suscripcionExistente = suscripcionRepository.obtenerPorUsuarioId(usuarioId);
+
             LocalDateTime ahora = LocalDateTime.now();
             LocalDateTime fechaFin = ahora.plusDays(planType.getDias());
             
-            Suscripcion suscripcion = new Suscripcion(
-                    UUID.randomUUID(),
-                    usuarioId,
-                    plan,
-                    ahora,
-                    fechaFin,
-                    false,
-                    ahora
-            );
-            
+            Suscripcion suscripcion;
+            if (suscripcionExistente.isPresent()) {
+                // Si ya existe, actualizarla con el nuevo plan
+                Suscripcion existente = suscripcionExistente.get();
+                suscripcion = new Suscripcion(
+                        existente.id(),
+                        usuarioId,
+                        plan,
+                        ahora,
+                        fechaFin,
+                        false,
+                        existente.fechaCreacion()
+                );
+            } else {
+                // Si no existe, crear una nueva
+                suscripcion = new Suscripcion(
+                        UUID.randomUUID(),
+                        usuarioId,
+                        plan,
+                        ahora,
+                        fechaFin,
+                        false,
+                        ahora
+                );
+            }
+
             suscripcion = suscripcionRepository.guardar(suscripcion);
             
             // Crear pago en BD con estado PENDIENTE

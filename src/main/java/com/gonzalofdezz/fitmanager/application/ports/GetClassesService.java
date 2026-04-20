@@ -33,13 +33,16 @@ public class GetClassesService implements GetClassesUseCase, ClassesInputPort {
 
     @Override
     public GymClass crearClase(String nombre, String descripcion, String nivel, Integer duracionMinutos, Integer capacidadPorDefecto) {
+        // Por ahora usamos gym_id = 1 (el gym por defecto creado en la migración V2)
+        // En el futuro, esto debería venir del contexto del usuario autenticado
         GymClass gymClass = new GymClass(
                 null,
                 nombre,
                 descripcion,
                 nivel,
                 duracionMinutos,
-                capacidadPorDefecto
+                capacidadPorDefecto,
+                1L  // gym_id por defecto
         );
         return loadClassesOutputPort.save(gymClass);
     }
@@ -54,7 +57,8 @@ public class GetClassesService implements GetClassesUseCase, ClassesInputPort {
                 descripcion,
                 nivel,
                 duracionMinutos,
-                capacidadPorDefecto
+                capacidadPorDefecto,
+                existente.gymId()  // Mantener el gym_id original
         );
         return loadClassesOutputPort.save(actualizada);
     }

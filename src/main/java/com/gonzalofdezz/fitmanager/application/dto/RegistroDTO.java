@@ -14,7 +14,7 @@ public record RegistroDTO(
         String email,
 
         @NotBlank(message = "La contraseña no puede estar vacía")
-        @Size(min = 6, max = 255, message = "La contraseña debe tener entre 6 y 255 caracteres")
+        @Size(min = 4, max = 255, message = "La contraseña debe tener entre 4 y 255 caracteres")
         String contrasena
 ) {
 }

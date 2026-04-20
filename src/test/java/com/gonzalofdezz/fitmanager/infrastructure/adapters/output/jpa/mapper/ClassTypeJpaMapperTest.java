@@ -16,6 +16,7 @@ class ClassTypeJpaMapperTest {
     void shouldMapEntityToDomain() {
         ClassTypeJpaEntity entity = new ClassTypeJpaEntity();
         ReflectionTestUtils.setField(entity, "id", 1L);
+        ReflectionTestUtils.setField(entity, "gymId", 1L);
         ReflectionTestUtils.setField(entity, "name", "Yoga");
         ReflectionTestUtils.setField(entity, "description", "Clase suave");
         ReflectionTestUtils.setField(entity, "level", "BEGINNER");
@@ -30,11 +31,12 @@ class ClassTypeJpaMapperTest {
         assertThat(result.nivel()).isEqualTo("BEGINNER");
         assertThat(result.duracionMinutos()).isEqualTo(60);
         assertThat(result.capacidadPorDefecto()).isEqualTo(20);
+        assertThat(result.gymId()).isEqualTo(1L);
     }
 
     @Test
     void shouldThrowWhenMappingDomainToEntity() {
-        GymClass gymClass = new GymClass(1L, "Yoga", "Clase suave", "BEGINNER", 60, 20);
+        GymClass gymClass = new GymClass(1L, "Yoga", "Clase suave", "BEGINNER", 60, 20, 1L);
 
         assertThatThrownBy(() -> mapper.toEntity(gymClass))
                 .isInstanceOf(UnsupportedOperationException.class)

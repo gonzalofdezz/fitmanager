@@ -6,6 +6,7 @@ public record GymClass(
         String descripcion,
         String nivel,
         Integer duracionMinutos,
-        Integer capacidadPorDefecto
+        Integer capacidadPorDefecto,
+        Long gymId
 ) {
 }
