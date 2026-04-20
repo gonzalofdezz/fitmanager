@@ -1,13 +1,12 @@
-package com.gonzalofdezz.fitmanager.domain.entity;
+package com.gonzalofdezz.fitmanager.application.dto;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public record Usuario(
+public record UsuarioResponseDTO(
         UUID id,
         String nombre,
         String email,
-        String contrasena,
         Boolean activo,
         LocalDateTime fechaCreacion
 ) {

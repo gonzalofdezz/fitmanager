@@ -1,5 +1,6 @@
 package com.gonzalofdezz.fitmanager.infrastructure.adapters.input.rest;
 
+import com.gonzalofdezz.fitmanager.application.ports.input.SuscripcionesInputPort;
 import com.gonzalofdezz.fitmanager.application.usecases.ObtenerSuscripcionUseCase;
 import com.gonzalofdezz.fitmanager.domain.entity.Suscripcion;
 import org.junit.jupiter.api.Test;
@@ -25,6 +26,9 @@ class SuscripcionControllerTest {
 
     @MockBean
     private ObtenerSuscripcionUseCase obtenerSuscripcionUseCase;
+
+    @MockBean
+    private SuscripcionesInputPort suscripcionesInputPort;
 
     @Test
     void shouldReturnSuscripcionWhenFound() throws Exception {

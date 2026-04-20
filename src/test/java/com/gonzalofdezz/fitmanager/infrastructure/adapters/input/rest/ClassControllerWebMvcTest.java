@@ -1,5 +1,6 @@
 package com.gonzalofdezz.fitmanager.infrastructure.adapters.input.rest;
 
+import com.gonzalofdezz.fitmanager.application.ports.input.ClassesInputPort;
 import com.gonzalofdezz.fitmanager.application.usecases.GetClassesUseCase;
 import com.gonzalofdezz.fitmanager.domain.entity.GymClass;
 import org.junit.jupiter.api.Test;
@@ -23,6 +24,9 @@ class ClassControllerWebMvcTest {
 
     @MockBean
     private GetClassesUseCase getClassesUseCase;
+
+    @MockBean
+    private ClassesInputPort classesInputPort;
 
     @Test
     void shouldReturnMappedClasses() throws Exception {

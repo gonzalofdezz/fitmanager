@@ -19,6 +19,9 @@ public class UsuarioJpaEntity {
     private String email;
 
     @Column(nullable = false)
+    private String contrasena;
+
+    @Column(nullable = false)
     private Boolean activo;
 
     @Column(nullable = false)
@@ -27,10 +30,11 @@ public class UsuarioJpaEntity {
     public UsuarioJpaEntity() {
     }
 
-    public UsuarioJpaEntity(UUID id, String nombre, String email, Boolean activo, LocalDateTime fechaCreacion) {
+    public UsuarioJpaEntity(UUID id, String nombre, String email, String contrasena, Boolean activo, LocalDateTime fechaCreacion) {
         this.id = id;
         this.nombre = nombre;
         this.email = email;
+        this.contrasena = contrasena;
         this.activo = activo;
         this.fechaCreacion = fechaCreacion;
     }
@@ -57,6 +61,14 @@ public class UsuarioJpaEntity {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getContrasena() {
+        return contrasena;
+    }
+
+    public void setContrasena(String contrasena) {
+        this.contrasena = contrasena;
     }
 
     public Boolean getActivo() {

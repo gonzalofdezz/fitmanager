@@ -2,6 +2,7 @@ package com.gonzalofdezz.fitmanager.infrastructure.adapters.input.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gonzalofdezz.fitmanager.application.dto.CrearReservaDTO;
+import com.gonzalofdezz.fitmanager.application.ports.input.ReservasInputPort;
 import com.gonzalofdezz.fitmanager.application.usecases.CrearReservaUseCase;
 import com.gonzalofdezz.fitmanager.domain.entity.Reserva;
 import org.junit.jupiter.api.Test;
@@ -31,6 +32,9 @@ class ReservaControllerTest {
 
     @MockBean
     private CrearReservaUseCase crearReservaUseCase;
+
+    @MockBean
+    private ReservasInputPort reservasInputPort;
 
     @Test
     void shouldCreateReservaAndReturnResponseBody() throws Exception {

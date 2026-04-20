@@ -7,6 +7,55 @@
   },
   "item": [
     {
+      "name": "Autenticación",
+      "item": [
+        {
+          "name": "Registrar usuario",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json", "type": "text"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Juan Pérez\",\n  \"email\": \"juan@example.com\",\n  \"contrasena\": \"password123\"\n}"
+            },
+            "url": {"raw": "{{baseUrl}}/auth/registrar", "host": ["{{baseUrl}}"], "path": ["auth", "registrar"]},
+            "description": "Registra un nuevo usuario en el sistema"
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json", "type": "text"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"juan@example.com\",\n  \"contrasena\": \"password123\"\n}"
+            },
+            "url": {"raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"]},
+            "description": "Realiza login con las credenciales de usuario"
+          }
+        },
+        {
+          "name": "Obtener usuario por email",
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Accept", "value": "application/json", "type": "text"}],
+            "url": {"raw": "{{baseUrl}}/auth/usuarios/juan@example.com", "host": ["{{baseUrl}}"], "path": ["auth", "usuarios", "juan@example.com"]},
+            "description": "Obtiene la información de un usuario por su email"
+          }
+        },
+        {
+          "name": "Verificar si email existe",
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Accept", "value": "application/json", "type": "text"}],
+            "url": {"raw": "{{baseUrl}}/auth/usuarios/juan@example.com/existe", "host": ["{{baseUrl}}"], "path": ["auth", "usuarios", "juan@example.com", "existe"]},
+            "description": "Verifica si un email ya está registrado en el sistema"
+          }
+        }
+      ]
+    },
+    {
       "name": "Clases",
       "item": [
         {
