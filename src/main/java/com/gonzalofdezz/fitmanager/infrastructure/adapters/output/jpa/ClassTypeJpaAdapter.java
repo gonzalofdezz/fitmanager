@@ -41,4 +41,9 @@ public class ClassTypeJpaAdapter implements LoadClassesOutputPort {
         var saved = classTypeRepository.save(jpa);
         return classTypeJpaMapper.toDomain(saved);
     }
+
+    @Override
+    public void deleteById(Long id) {
+        classTypeRepository.deleteById(id);
+    }
 }

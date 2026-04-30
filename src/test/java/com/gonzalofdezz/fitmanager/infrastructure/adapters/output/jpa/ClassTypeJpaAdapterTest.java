@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Sort;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -33,7 +34,7 @@ class ClassTypeJpaAdapterTest {
     @Test
     void shouldLoadAllClassesSortedById() {
         ClassTypeJpaEntity entity = new ClassTypeJpaEntity();
-        GymClass gymClass = new GymClass(1L, "Yoga", "Clase", "BEGINNER", 60, 20, 1L);
+        GymClass gymClass = new GymClass(1L, "Yoga", "Clase", "BEGINNER", 60, 20, "Lunes", LocalDate.now(), 1L);
 
         when(classTypeRepository.findAll(any(Sort.class))).thenReturn(List.of(entity));
         when(classTypeJpaMapper.toDomain(entity)).thenReturn(gymClass);

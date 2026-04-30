@@ -61,10 +61,17 @@ public class GetClassesService implements GetClassesUseCase, ClassesInputPort {
                 nivel,
                 duracionMinutos,
                 capacidadPorDefecto,
-                existente.diaSemana(),  // Mantener el día original
-                existente.fecha(),  // Mantener la fecha original
-                existente.gymId()  // Mantener el gym_id original
+                existente.diaSemana(),
+                existente.fecha(),
+                existente.gymId()
         );
         return loadClassesOutputPort.save(actualizada);
+    }
+
+    @Override
+    public void eliminarClase(Long id) {
+        // Verificar que existe antes de eliminar
+        loadClassesOutputPort.getClassById(id);
+        loadClassesOutputPort.deleteById(id);
     }
 }

@@ -1,9 +1,11 @@
 package com.gonzalofdezz.fitmanager.infrastructure.adapters.input.rest;
 
 import com.gonzalofdezz.fitmanager.application.dto.LoginDTO;
+import com.gonzalofdezz.fitmanager.application.dto.LoginResponseDTO;
 import com.gonzalofdezz.fitmanager.application.dto.RegistroDTO;
 import com.gonzalofdezz.fitmanager.application.dto.UsuarioResponseDTO;
 import com.gonzalofdezz.fitmanager.application.ports.input.AutenticacionInputPort;
+import com.gonzalofdezz.fitmanager.config.security.JwtService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -17,9 +19,11 @@ import org.springframework.web.bind.annotation.*;
 public class AutenticacionController {
 
     private final AutenticacionInputPort autenticacionInputPort;
+    private final JwtService jwtService;
 
-    public AutenticacionController(AutenticacionInputPort autenticacionInputPort) {
+    public AutenticacionController(AutenticacionInputPort autenticacionInputPort, JwtService jwtService) {
         this.autenticacionInputPort = autenticacionInputPort;
+        this.jwtService = jwtService;
     }
 
     @PostMapping("/registrar")
@@ -37,7 +41,8 @@ public class AutenticacionController {
                     usuario.nombre(),
                     usuario.email(),
                     usuario.activo(),
-                    usuario.fechaCreacion()
+                    usuario.fechaCreacion(),
+                    usuario.rol() != null ? usuario.rol().name() : "USER"
             );
         } catch (IllegalArgumentException e) {
             throw new RuntimeException(e.getMessage());
@@ -46,7 +51,7 @@ public class AutenticacionController {
 
     @PostMapping("/login")
     @Operation(summary = "Realiza login de un usuario")
-    public ResponseEntity<UsuarioResponseDTO> login(@Valid @RequestBody LoginDTO request) {
+    public ResponseEntity<LoginResponseDTO> login(@Valid @RequestBody LoginDTO request) {
         var usuario = autenticacionInputPort.login(request.email(), request.contrasena());
 
         if (usuario.isEmpty()) {
@@ -54,12 +59,16 @@ public class AutenticacionController {
         }
 
         var user = usuario.get();
-        return ResponseEntity.ok(new UsuarioResponseDTO(
+        String token = jwtService.generateToken(user);
+
+        return ResponseEntity.ok(new LoginResponseDTO(
                 user.id(),
                 user.nombre(),
                 user.email(),
                 user.activo(),
-                user.fechaCreacion()
+                user.fechaCreacion(),
+                user.rol() != null ? user.rol().name() : "USER",
+                token
         ));
     }
 
@@ -78,7 +87,8 @@ public class AutenticacionController {
                 user.nombre(),
                 user.email(),
                 user.activo(),
-                user.fechaCreacion()
+                user.fechaCreacion(),
+                user.rol() != null ? user.rol().name() : "USER"
         ));
     }
 

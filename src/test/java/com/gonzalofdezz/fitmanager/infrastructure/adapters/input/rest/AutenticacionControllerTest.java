@@ -3,7 +3,10 @@ package com.gonzalofdezz.fitmanager.infrastructure.adapters.input.rest;
 import com.gonzalofdezz.fitmanager.application.dto.LoginDTO;
 import com.gonzalofdezz.fitmanager.application.dto.RegistroDTO;
 import com.gonzalofdezz.fitmanager.application.ports.input.AutenticacionInputPort;
+import com.gonzalofdezz.fitmanager.config.security.JwtAuthenticationFilter;
+import com.gonzalofdezz.fitmanager.config.security.JwtService;
 import com.gonzalofdezz.fitmanager.domain.entity.Usuario;
+import com.gonzalofdezz.fitmanager.domain.enums.RolUsuario;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,23 +38,21 @@ class AutenticacionControllerTest {
     @MockBean
     private AutenticacionInputPort autenticacionInputPort;
 
+    @MockBean
+    private JwtService jwtService;
+
+    @MockBean
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
+
     @Test
     @DisplayName("Debería registrar un nuevo usuario exitosamente")
     void testRegistrarExitoso() throws Exception {
         // Given
         RegistroDTO request = new RegistroDTO("Juan Pérez", "juan@example.com", "password123");
         UUID usuarioId = UUID.randomUUID();
-        Usuario usuario = new Usuario(
-                usuarioId,
-                "Juan Pérez",
-                "juan@example.com",
-                "password123",
-                true,
-                LocalDateTime.now()
-        );
+        Usuario usuario = new Usuario(usuarioId, "Juan Pérez", "juan@example.com", "hashed", true, LocalDateTime.now(), RolUsuario.USER);
 
-        when(autenticacionInputPort.registrar(anyString(), anyString(), anyString()))
-                .thenReturn(usuario);
+        when(autenticacionInputPort.registrar(anyString(), anyString(), anyString())).thenReturn(usuario);
 
         // When & Then
         mockMvc.perform(post("/auth/registrar")
@@ -102,17 +103,10 @@ class AutenticacionControllerTest {
         // Given
         LoginDTO request = new LoginDTO("juan@example.com", "password123");
         UUID usuarioId = UUID.randomUUID();
-        Usuario usuario = new Usuario(
-                usuarioId,
-                "Juan Pérez",
-                "juan@example.com",
-                "password123",
-                true,
-                LocalDateTime.now()
-        );
+        Usuario usuario = new Usuario(usuarioId, "Juan Pérez", "juan@example.com", "hashed", true, LocalDateTime.now(), RolUsuario.USER);
 
-        when(autenticacionInputPort.login("juan@example.com", "password123"))
-                .thenReturn(Optional.of(usuario));
+        when(autenticacionInputPort.login("juan@example.com", "password123")).thenReturn(Optional.of(usuario));
+        when(jwtService.generateToken(any())).thenReturn("fake-jwt-token");
 
         // When & Then
         mockMvc.perform(post("/auth/login")
@@ -122,7 +116,9 @@ class AutenticacionControllerTest {
                 .andExpect(jsonPath("$.id").value(usuarioId.toString()))
                 .andExpect(jsonPath("$.nombre").value("Juan Pérez"))
                 .andExpect(jsonPath("$.email").value("juan@example.com"))
-                .andExpect(jsonPath("$.activo").value(true));
+                .andExpect(jsonPath("$.activo").value(true))
+                .andExpect(jsonPath("$.rol").value("USER"))
+                .andExpect(jsonPath("$.token").value("fake-jwt-token"));
 
         verify(autenticacionInputPort, times(1)).login("juan@example.com", "password123");
     }
@@ -132,9 +128,7 @@ class AutenticacionControllerTest {
     void testLoginCredencialesIncorrectas() throws Exception {
         // Given
         LoginDTO request = new LoginDTO("juan@example.com", "wrongPassword");
-
-        when(autenticacionInputPort.login("juan@example.com", "wrongPassword"))
-                .thenReturn(Optional.empty());
+        when(autenticacionInputPort.login("juan@example.com", "wrongPassword")).thenReturn(Optional.empty());
 
         // When & Then
         mockMvc.perform(post("/auth/login")
@@ -151,17 +145,9 @@ class AutenticacionControllerTest {
         // Given
         String email = "juan@example.com";
         UUID usuarioId = UUID.randomUUID();
-        Usuario usuario = new Usuario(
-                usuarioId,
-                "Juan Pérez",
-                email,
-                "password123",
-                true,
-                LocalDateTime.now()
-        );
+        Usuario usuario = new Usuario(usuarioId, "Juan Pérez", email, "hashed", true, LocalDateTime.now(), RolUsuario.USER);
 
-        when(autenticacionInputPort.obtenerPorEmail(email))
-                .thenReturn(Optional.of(usuario));
+        when(autenticacionInputPort.obtenerPorEmail(email)).thenReturn(Optional.of(usuario));
 
         // When & Then
         mockMvc.perform(get("/auth/usuarios/{email}", email)
@@ -178,9 +164,7 @@ class AutenticacionControllerTest {
     void testObtenerPorEmailNoExiste() throws Exception {
         // Given
         String email = "noexiste@example.com";
-
-        when(autenticacionInputPort.obtenerPorEmail(email))
-                .thenReturn(Optional.empty());
+        when(autenticacionInputPort.obtenerPorEmail(email)).thenReturn(Optional.empty());
 
         // When & Then
         mockMvc.perform(get("/auth/usuarios/{email}", email)
@@ -195,9 +179,7 @@ class AutenticacionControllerTest {
     void testEmailExiste() throws Exception {
         // Given
         String email = "juan@example.com";
-
-        when(autenticacionInputPort.emailExiste(email))
-                .thenReturn(true);
+        when(autenticacionInputPort.emailExiste(email)).thenReturn(true);
 
         // When & Then
         mockMvc.perform(get("/auth/usuarios/{email}/existe", email)
@@ -213,9 +195,7 @@ class AutenticacionControllerTest {
     void testEmailNoExiste() throws Exception {
         // Given
         String email = "noexiste@example.com";
-
-        when(autenticacionInputPort.emailExiste(email))
-                .thenReturn(false);
+        when(autenticacionInputPort.emailExiste(email)).thenReturn(false);
 
         // When & Then
         mockMvc.perform(get("/auth/usuarios/{email}/existe", email)

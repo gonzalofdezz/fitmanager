@@ -1,6 +1,7 @@
 package com.gonzalofdezz.fitmanager.infrastructure.adapters.output.jpa;
 
 import com.gonzalofdezz.fitmanager.domain.entity.Usuario;
+import com.gonzalofdezz.fitmanager.domain.enums.RolUsuario;
 import com.gonzalofdezz.fitmanager.infrastructure.adapters.output.jpa.data.UsuarioJpaEntity;
 import com.gonzalofdezz.fitmanager.infrastructure.adapters.output.jpa.repository.UsuarioSpringDataRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,13 +38,15 @@ class UsuarioJpaAdapterTest {
     void testSaveUsuario() {
         // Given
         UUID usuarioId = UUID.randomUUID();
+        LocalDateTime now = LocalDateTime.now();
         Usuario usuario = new Usuario(
                 usuarioId,
                 "Juan Pérez",
                 "juan@example.com",
                 "password123",
                 true,
-                LocalDateTime.now()
+                now,
+                RolUsuario.USER
         );
 
         UsuarioJpaEntity entity = new UsuarioJpaEntity(
@@ -52,7 +55,8 @@ class UsuarioJpaAdapterTest {
                 "juan@example.com",
                 "password123",
                 true,
-                usuario.fechaCreacion()
+                now,
+                "USER"
         );
 
         when(usuarioRepository.save(any(UsuarioJpaEntity.class))).thenReturn(entity);
@@ -67,6 +71,7 @@ class UsuarioJpaAdapterTest {
         assertEquals("juan@example.com", resultado.email());
         assertEquals("password123", resultado.contrasena());
         assertTrue(resultado.activo());
+        assertEquals(RolUsuario.USER, resultado.rol());
 
         verify(usuarioRepository, times(1)).save(any(UsuarioJpaEntity.class));
     }
@@ -83,7 +88,8 @@ class UsuarioJpaAdapterTest {
                 email,
                 "password123",
                 true,
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                "USER"
         );
 
         when(usuarioRepository.findByEmail(email)).thenReturn(Optional.of(entity));
@@ -95,6 +101,7 @@ class UsuarioJpaAdapterTest {
         assertTrue(resultado.isPresent());
         assertEquals(usuarioId, resultado.get().id());
         assertEquals(email, resultado.get().email());
+        assertEquals(RolUsuario.USER, resultado.get().rol());
 
         verify(usuarioRepository, times(1)).findByEmail(email);
     }
@@ -111,7 +118,6 @@ class UsuarioJpaAdapterTest {
 
         // Then
         assertTrue(resultado.isEmpty());
-
         verify(usuarioRepository, times(1)).findByEmail(email);
     }
 
@@ -126,7 +132,8 @@ class UsuarioJpaAdapterTest {
                 "juan@example.com",
                 "password123",
                 true,
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                "USER"
         );
 
         when(usuarioRepository.findById(usuarioId)).thenReturn(Optional.of(entity));
@@ -147,13 +154,7 @@ class UsuarioJpaAdapterTest {
         // Given
         String email = "juan@example.com";
         when(usuarioRepository.existsByEmail(email)).thenReturn(true);
-
-        // When
-        boolean resultado = usuarioJpaAdapter.existsByEmail(email);
-
-        // Then
-        assertTrue(resultado);
-
+        assertTrue(usuarioJpaAdapter.existsByEmail(email));
         verify(usuarioRepository, times(1)).existsByEmail(email);
     }
 
@@ -163,14 +164,7 @@ class UsuarioJpaAdapterTest {
         // Given
         String email = "noexiste@example.com";
         when(usuarioRepository.existsByEmail(email)).thenReturn(false);
-
-        // When
-        boolean resultado = usuarioJpaAdapter.existsByEmail(email);
-
-        // Then
-        assertFalse(resultado);
-
+        assertFalse(usuarioJpaAdapter.existsByEmail(email));
         verify(usuarioRepository, times(1)).existsByEmail(email);
     }
 }
-

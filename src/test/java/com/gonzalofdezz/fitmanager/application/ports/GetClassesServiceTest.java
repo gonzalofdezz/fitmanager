@@ -8,6 +8,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -25,7 +26,9 @@ class GetClassesServiceTest {
 
     @Test
     void shouldReturnClassesFromOutputPort() {
-        List<GymClass> expected = List.of(new GymClass(1L, "Yoga", "Clase", "BEGINNER", 60, 20, 1L));
+        List<GymClass> expected = List.of(
+                new GymClass(1L, "Yoga", "Clase", "BEGINNER", 60, 20, "Lunes", LocalDate.now(), 1L)
+        );
         when(loadClassesOutputPort.findAll()).thenReturn(expected);
 
         List<GymClass> result = getClassesService.execute();

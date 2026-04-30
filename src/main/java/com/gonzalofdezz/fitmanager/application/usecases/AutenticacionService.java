@@ -4,7 +4,9 @@ import com.gonzalofdezz.fitmanager.application.ports.input.AutenticacionInputPor
 import com.gonzalofdezz.fitmanager.application.ports.input.SuscripcionesInputPort;
 import com.gonzalofdezz.fitmanager.application.ports.output.UsuarioRepositoryOutputPort;
 import com.gonzalofdezz.fitmanager.domain.entity.Usuario;
+import com.gonzalofdezz.fitmanager.domain.enums.RolUsuario;
 import com.gonzalofdezz.fitmanager.domain.enums.TipoPlan;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -16,11 +18,14 @@ public class AutenticacionService implements AutenticacionInputPort {
 
     private final UsuarioRepositoryOutputPort usuarioRepository;
     private final SuscripcionesInputPort suscripcionesInputPort;
+    private final PasswordEncoder passwordEncoder;
 
     public AutenticacionService(UsuarioRepositoryOutputPort usuarioRepository,
-                                SuscripcionesInputPort suscripcionesInputPort) {
+                                SuscripcionesInputPort suscripcionesInputPort,
+                                PasswordEncoder passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
         this.suscripcionesInputPort = suscripcionesInputPort;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -37,9 +42,10 @@ public class AutenticacionService implements AutenticacionInputPort {
                 UUID.randomUUID(),
                 nombre,
                 email,
-                hashPassword(contrasena),
+                passwordEncoder.encode(contrasena),
                 true,
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                RolUsuario.USER
         );
 
         Usuario usuarioGuardado = usuarioRepository.save(usuario);
@@ -58,7 +64,7 @@ public class AutenticacionService implements AutenticacionInputPort {
     @Override
     public Optional<Usuario> login(String email, String contrasena) {
         return usuarioRepository.findByEmail(email)
-                .filter(usuario -> usuario.activo() && verifyPassword(contrasena, usuario.contrasena()));
+                .filter(usuario -> usuario.activo() && passwordEncoder.matches(contrasena, usuario.contrasena()));
     }
 
     @Override
@@ -69,22 +75,6 @@ public class AutenticacionService implements AutenticacionInputPort {
     @Override
     public boolean emailExiste(String email) {
         return usuarioRepository.existsByEmail(email);
-    }
-
-    /**
-     * Hash simple para la contraseña - En producción usar BCryptPasswordEncoder
-     */
-    private String hashPassword(String password) {
-        // TODO: Implementar BCryptPasswordEncoder en producción
-        return password; // Por ahora, guardamos la contraseña sin hash para desarrollo
-    }
-
-    /**
-     * Verifica la contraseña - En producción usar BCryptPasswordEncoder
-     */
-    private boolean verifyPassword(String rawPassword, String hashedPassword) {
-        // TODO: Implementar BCryptPasswordEncoder en producción
-        return rawPassword.equals(hashedPassword); // Por ahora, comparación simple para desarrollo
     }
 }
 

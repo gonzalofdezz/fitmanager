@@ -3,12 +3,14 @@ package com.gonzalofdezz.fitmanager.application.usecases;
 import com.gonzalofdezz.fitmanager.application.ports.input.SuscripcionesInputPort;
 import com.gonzalofdezz.fitmanager.application.ports.output.UsuarioRepositoryOutputPort;
 import com.gonzalofdezz.fitmanager.domain.entity.Usuario;
+import com.gonzalofdezz.fitmanager.domain.enums.RolUsuario;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -28,11 +30,14 @@ class AutenticacionServiceTest {
     @Mock
     private SuscripcionesInputPort suscripcionesInputPort;
 
+    @Mock
+    private PasswordEncoder passwordEncoder;
+
     private AutenticacionService autenticacionService;
 
     @BeforeEach
     void setUp() {
-        autenticacionService = new AutenticacionService(usuarioRepository, suscripcionesInputPort);
+        autenticacionService = new AutenticacionService(usuarioRepository, suscripcionesInputPort, passwordEncoder);
     }
 
     @Test
@@ -44,6 +49,7 @@ class AutenticacionServiceTest {
         String contrasena = "password123";
 
         when(usuarioRepository.existsByEmail(email)).thenReturn(false);
+        when(passwordEncoder.encode(contrasena)).thenReturn("$2a$hasheado");
         when(usuarioRepository.save(any(Usuario.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         // When
@@ -56,6 +62,7 @@ class AutenticacionServiceTest {
         assertTrue(resultado.activo());
         assertNotNull(resultado.id());
         assertNotNull(resultado.fechaCreacion());
+        assertEquals(RolUsuario.USER, resultado.rol());
 
         verify(usuarioRepository, times(1)).existsByEmail(email);
         verify(usuarioRepository, times(1)).save(any(Usuario.class));
@@ -100,16 +107,10 @@ class AutenticacionServiceTest {
         String email = "juan@example.com";
         String contrasena = "password123";
         UUID usuarioId = UUID.randomUUID();
-        Usuario usuario = new Usuario(
-                usuarioId,
-                "Juan Pérez",
-                email,
-                contrasena,
-                true,
-                LocalDateTime.now()
-        );
+        Usuario usuario = new Usuario(usuarioId, "Juan Pérez", email, "$2a$hasheado", true, LocalDateTime.now(), RolUsuario.USER);
 
         when(usuarioRepository.findByEmail(email)).thenReturn(Optional.of(usuario));
+        when(passwordEncoder.matches(contrasena, "$2a$hasheado")).thenReturn(true);
 
         // When
         Optional<Usuario> resultado = autenticacionService.login(email, contrasena);
@@ -118,7 +119,6 @@ class AutenticacionServiceTest {
         assertTrue(resultado.isPresent());
         assertEquals(usuarioId, resultado.get().id());
         assertEquals(email, resultado.get().email());
-
         verify(usuarioRepository, times(1)).findByEmail(email);
     }
 
@@ -127,24 +127,16 @@ class AutenticacionServiceTest {
     void testLoginContraseñaIncorrecta() {
         // Given
         String email = "juan@example.com";
-        String contrasena = "password123";
-        Usuario usuario = new Usuario(
-                UUID.randomUUID(),
-                "Juan Pérez",
-                email,
-                contrasena,
-                true,
-                LocalDateTime.now()
-        );
+        Usuario usuario = new Usuario(UUID.randomUUID(), "Juan Pérez", email, "$2a$hasheado", true, LocalDateTime.now(), RolUsuario.USER);
 
         when(usuarioRepository.findByEmail(email)).thenReturn(Optional.of(usuario));
+        when(passwordEncoder.matches("wrongPassword", "$2a$hasheado")).thenReturn(false);
 
         // When
         Optional<Usuario> resultado = autenticacionService.login(email, "wrongPassword");
 
         // Then
         assertTrue(resultado.isEmpty());
-
         verify(usuarioRepository, times(1)).findByEmail(email);
     }
 
@@ -160,7 +152,6 @@ class AutenticacionServiceTest {
 
         // Then
         assertTrue(resultado.isEmpty());
-
         verify(usuarioRepository, times(1)).findByEmail(email);
     }
 
@@ -170,14 +161,7 @@ class AutenticacionServiceTest {
         // Given
         String email = "juan@example.com";
         String contrasena = "password123";
-        Usuario usuario = new Usuario(
-                UUID.randomUUID(),
-                "Juan Pérez",
-                email,
-                contrasena,
-                false, // Usuario inactivo
-                LocalDateTime.now()
-        );
+        Usuario usuario = new Usuario(UUID.randomUUID(), "Juan Pérez", email, "$2a$hasheado", false, LocalDateTime.now(), RolUsuario.USER);
 
         when(usuarioRepository.findByEmail(email)).thenReturn(Optional.of(usuario));
 
@@ -186,7 +170,6 @@ class AutenticacionServiceTest {
 
         // Then
         assertTrue(resultado.isEmpty());
-
         verify(usuarioRepository, times(1)).findByEmail(email);
     }
 
@@ -196,14 +179,7 @@ class AutenticacionServiceTest {
         // Given
         String email = "juan@example.com";
         UUID usuarioId = UUID.randomUUID();
-        Usuario usuario = new Usuario(
-                usuarioId,
-                "Juan Pérez",
-                email,
-                "password123",
-                true,
-                LocalDateTime.now()
-        );
+        Usuario usuario = new Usuario(usuarioId, "Juan Pérez", email, "hash", true, LocalDateTime.now(), RolUsuario.USER);
 
         when(usuarioRepository.findByEmail(email)).thenReturn(Optional.of(usuario));
 
@@ -213,8 +189,6 @@ class AutenticacionServiceTest {
         // Then
         assertTrue(resultado.isPresent());
         assertEquals(usuarioId, resultado.get().id());
-        assertEquals(email, resultado.get().email());
-
         verify(usuarioRepository, times(1)).findByEmail(email);
     }
 

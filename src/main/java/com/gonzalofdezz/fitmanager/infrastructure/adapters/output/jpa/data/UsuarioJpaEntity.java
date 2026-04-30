@@ -27,16 +27,20 @@ public class UsuarioJpaEntity {
     @Column(nullable = false)
     private LocalDateTime fechaCreacion;
 
+    @Column(nullable = false)
+    private String rol;
+
     public UsuarioJpaEntity() {
     }
 
-    public UsuarioJpaEntity(UUID id, String nombre, String email, String contrasena, Boolean activo, LocalDateTime fechaCreacion) {
+    public UsuarioJpaEntity(UUID id, String nombre, String email, String contrasena, Boolean activo, LocalDateTime fechaCreacion, String rol) {
         this.id = id;
         this.nombre = nombre;
         this.email = email;
         this.contrasena = contrasena;
         this.activo = activo;
         this.fechaCreacion = fechaCreacion;
+        this.rol = rol;
     }
 
     public UUID getId() {
@@ -86,5 +90,12 @@ public class UsuarioJpaEntity {
     public void setFechaCreacion(LocalDateTime fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
     }
-}
 
+    public String getRol() {
+        return rol;
+    }
+
+    public void setRol(String rol) {
+        this.rol = rol;
+    }
+}

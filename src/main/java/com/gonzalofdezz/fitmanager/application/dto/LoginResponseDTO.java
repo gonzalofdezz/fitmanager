@@ -1,18 +1,16 @@
-package com.gonzalofdezz.fitmanager.domain.entity;
-
-import com.gonzalofdezz.fitmanager.domain.enums.RolUsuario;
+package com.gonzalofdezz.fitmanager.application.dto;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public record Usuario(
+public record LoginResponseDTO(
         UUID id,
         String nombre,
         String email,
-        String contrasena,
         Boolean activo,
         LocalDateTime fechaCreacion,
-        RolUsuario rol
+        String rol,
+        String token
 ) {
 }
 

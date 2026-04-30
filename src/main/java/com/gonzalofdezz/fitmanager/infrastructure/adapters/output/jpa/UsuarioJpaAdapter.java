@@ -2,6 +2,7 @@ package com.gonzalofdezz.fitmanager.infrastructure.adapters.output.jpa;
 
 import com.gonzalofdezz.fitmanager.application.ports.output.UsuarioRepositoryOutputPort;
 import com.gonzalofdezz.fitmanager.domain.entity.Usuario;
+import com.gonzalofdezz.fitmanager.domain.enums.RolUsuario;
 import com.gonzalofdezz.fitmanager.infrastructure.adapters.output.jpa.data.UsuarioJpaEntity;
 import com.gonzalofdezz.fitmanager.infrastructure.adapters.output.jpa.repository.UsuarioSpringDataRepository;
 import org.springframework.stereotype.Component;
@@ -26,7 +27,8 @@ public class UsuarioJpaAdapter implements UsuarioRepositoryOutputPort {
                 usuario.email(),
                 usuario.contrasena(),
                 usuario.activo(),
-                usuario.fechaCreacion()
+                usuario.fechaCreacion(),
+                usuario.rol() != null ? usuario.rol().name() : RolUsuario.USER.name()
         );
         var saved = usuarioRepository.save(entity);
         return toDomain(saved);
@@ -50,13 +52,20 @@ public class UsuarioJpaAdapter implements UsuarioRepositoryOutputPort {
     }
 
     private Usuario toDomain(UsuarioJpaEntity entity) {
+        RolUsuario rol;
+        try {
+            rol = RolUsuario.valueOf(entity.getRol());
+        } catch (Exception e) {
+            rol = RolUsuario.USER;
+        }
         return new Usuario(
                 entity.getId(),
                 entity.getNombre(),
                 entity.getEmail(),
                 entity.getContrasena(),
                 entity.getActivo(),
-                entity.getFechaCreacion()
+                entity.getFechaCreacion(),
+                rol
         );
     }
 }

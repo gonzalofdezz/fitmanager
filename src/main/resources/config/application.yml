@@ -36,3 +36,9 @@ springdoc:
     path: /swagger
   api-docs:
     path: /api-docs
+
+application:
+  jwt:
+    secret: fitmanager-secret-key-2024-seguridad-hexagonal-rbac
+    expiration: 86400000
+
