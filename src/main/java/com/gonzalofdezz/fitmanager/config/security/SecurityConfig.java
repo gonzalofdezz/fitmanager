@@ -44,8 +44,11 @@ public class SecurityConfig {
                     "/api-docs/**",
                     "/v3/api-docs/**",
                     "/h2-console/**",
+                    "/error",
                     "/clases",
-                    "/clases/**"
+                    "/clases/**",
+                    "/progresion/**",
+                    "/mediciones-progresion/**"
                 ).permitAll()
                 .anyRequest().authenticated()
             )
