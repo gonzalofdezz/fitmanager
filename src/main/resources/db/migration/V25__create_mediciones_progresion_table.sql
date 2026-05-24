@@ -1,8 +1,8 @@
 CREATE TABLE mediciones_progresion (
     id UUID NOT NULL PRIMARY KEY,
     usuario_id UUID NOT NULL,
-    peso DOUBLE,
-    peso_maximo_levantado DOUBLE,
+    peso DOUBLE PRECISION,
+    peso_maximo_levantado DOUBLE PRECISION,
     fecha DATE NOT NULL,
     notas TEXT,
     fecha_creacion TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,

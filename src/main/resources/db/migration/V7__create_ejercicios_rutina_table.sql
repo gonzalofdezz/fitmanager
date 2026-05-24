@@ -5,7 +5,7 @@ CREATE TABLE ejercicios_rutina (
     nombre_ejercicio VARCHAR(255) NOT NULL,
     series INTEGER NOT NULL,
     repeticiones INTEGER NOT NULL,
-    peso DOUBLE,
+    peso DOUBLE PRECISION,
     descanso_segundos INTEGER
 );
 
