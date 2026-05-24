@@ -3,8 +3,8 @@
 -- Esto permite que la suscripción NINGUNA (sin plan) no tenga fechas definidas
 
 ALTER TABLE suscripciones
-    ALTER COLUMN fecha_inicio SET NULL;
+    ALTER COLUMN fecha_inicio DROP NOT NULL;
 
 ALTER TABLE suscripciones
-    ALTER COLUMN fecha_fin SET NULL;
+    ALTER COLUMN fecha_fin DROP NOT NULL;
 
