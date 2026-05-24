@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: ${PORT:8080}
 
 spring:
   application:
@@ -39,6 +39,6 @@ springdoc:
 
 application:
   jwt:
-    secret: fitmanager-secret-key-2024-seguridad-hexagonal-rbac
-    expiration: 86400000
+    secret: ${JWT_SECRET:fitmanager-secret-key-2024-seguridad-hexagonal-rbac}
+    expiration: ${JWT_EXPIRATION:86400000}
 
