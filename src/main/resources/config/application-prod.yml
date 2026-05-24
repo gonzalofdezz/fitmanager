@@ -17,6 +17,7 @@ spring:
 
   flyway:
     enabled: true
+    baseline-on-migrate: true
 
   h2:
     console:
@@ -40,5 +41,3 @@ management:
   endpoint:
     health:
       show-details: never
-
-
