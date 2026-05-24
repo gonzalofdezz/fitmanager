@@ -18,7 +18,7 @@ public class RutinaJpaEntity {
     @Column(nullable = false)
     private String nombre;
 
-    @Column(nullable = false)
+    @Column
     private String descripcion;
 
     @Column(nullable = false)

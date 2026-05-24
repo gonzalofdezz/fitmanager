@@ -18,10 +18,10 @@ public class SuscripcionJpaEntity {
     @Column(nullable = false)
     private String tipoPlan;
 
-    @Column(nullable = false)
+    @Column
     private LocalDateTime fechaInicio;
 
-    @Column(nullable = false)
+    @Column
     private LocalDateTime fechaFin;
 
     @Column(nullable = false)

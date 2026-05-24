@@ -15,7 +15,7 @@ public class ProgresionJpaEntity {
     @Column(nullable = false)
     private UUID usuarioId;
 
-    @Column(name = "peso_corporal", columnDefinition = "DECIMAL(5, 2)")
+    @Column(name = "peso_corporal", columnDefinition = "NUMERIC(5, 2)")
     private Double pesoCorporal;
 
     @Column(nullable = false, name = "entrenamientos_completados")
@@ -30,7 +30,7 @@ public class ProgresionJpaEntity {
     @Column(name = "bandejas_conseguidas")
     private String banderasConseguidas;
 
-    @Column(name = "peso_maximo_levantado", columnDefinition = "DECIMAL(8, 2)")
+    @Column(name = "peso_maximo_levantado", columnDefinition = "NUMERIC(8, 2)")
     private Double pesoMaximoLevantado;
 
     @Column(nullable = false, name = "fecha_creacion")

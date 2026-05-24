@@ -27,7 +27,7 @@ public class PagoJpaEntity {
     @Column
     private LocalDateTime fechaPago;
 
-    @Column(nullable = false)
+    @Column
     private String referenciaPago;
 
     @Column(nullable = false)
